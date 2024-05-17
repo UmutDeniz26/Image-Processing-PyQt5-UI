@@ -9,7 +9,7 @@ import sys
 import cv2
 import numpy as np
 
-import image_operator
+import Image_Operations
 
 class PyqtUI(QMainWindow):
     def __init__(self):
@@ -17,10 +17,28 @@ class PyqtUI(QMainWindow):
         uic.loadUi('pyqtUI_design.ui', self)
         self.show()
 
-        self.image_operator = image_operator.image_operator()
+        self.image_operator = Image_Operations.Image_Operations()
         
         # Connect the buttons
         self.sourceFolder.clicked.connect(self.load_image)
+
+    def update_images(self):
+        # Label Object name is sourceImage and outputImage
+
+        self.sourceImage.setPixmap(
+            QPixmap.fromImage(
+                self.image_operator.get_source_image().get_QImage()
+            )
+        )
+        self.sourceImage.setAlignment(Qt.AlignCenter)
+
+        self.outputImage.setPixmap(
+            QPixmap.fromImage(
+                self.image_operator.get_output_image().get_QImage()
+            )
+        )
+        self.outputImage.setAlignment(Qt.AlignCenter)
+
 
     def load_image(self):
         
@@ -31,8 +49,8 @@ class PyqtUI(QMainWindow):
         if image_path:
             print("Image path: ", image_path)
             self.image_operator.set_source_image(image_path)
-            self.image_operator.show_output_image()
-
+            
+            self.update_images()
         """
         if image_path:
             image = cv2.imread(image_path)

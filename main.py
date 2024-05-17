@@ -1,5 +1,5 @@
 import pyqtUi
-import image_operator
+import Image_Operations
 
 import cv2
 import numpy as np
