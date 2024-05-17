@@ -3,15 +3,16 @@ import cv2
 import skimage as ski
 
 class image_operator:
-    def __init__(self, image:np.ndarray):
+    def __init__(self, image:np.ndarray = None):
         """
         Constructor for image_operator class
         :param image: np.ndarray or str
         """
         
-        self.set_source_image( image )
-        self.__set_output_image( self.get_source_image() )
-
+        if image is not None:
+            self.set_source_image( image )
+            self.__set_output_image( self.get_source_image() )
+    
 
     def set_source_image(self, image:np.ndarray):
         if type(image) == str:
@@ -21,6 +22,7 @@ class image_operator:
         else:
             raise ValueError('Invalid input')
             
+        self.__set_output_image(self.get_source_image())
         self.__set_source_image_type(self.get_image_channels_type(image))
         
     def __set_output_image(self, output:np.ndarray):
@@ -53,6 +55,10 @@ class image_operator:
         Function to get the type of the image channels like RGB, BGR, HSV, GRAY etc.
         :return: str
         """
+        if type(image) == str:
+            image = cv2.imread(image, cv2.IMREAD_COLOR)
+
+
         channels = image.shape[2] if len(image.shape) > 2  else 1
         
         if channels == 3:
@@ -152,14 +158,15 @@ class image_operator:
             cv2.waitKey(1000)
             cv2.destroyAllWindows()
             
-    
-image = cv2.imread('lena.png', cv2.IMREAD_COLOR)
-img_op = image_operator(image)
+if __name__ == '__main__':
+    print(" Testing image_operator class: ")    
+    image = cv2.imread('lena.png', cv2.IMREAD_COLOR)
+    img_op = image_operator(image)
 
-img_op.convert_to_gray()
+    img_op.convert_to_gray()
 
-img_op.show_output_image()
+    img_op.show_output_image()
 
-img_op.edge_detection( method='sobel' )
+    img_op.edge_detection( method='sobel' )
 
-img_op.show_output_image()
+    img_op.show_output_image()
