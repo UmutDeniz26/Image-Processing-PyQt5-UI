@@ -14,20 +14,22 @@ class Image_Operations:
         if image is not None:
             self.set_source_image( image )
     
-
+    # Set the source image
     def set_source_image(self, image:np.ndarray):
         self.source_image = Image.Image(image)
-        print("Image type src: ", self.source_image.get_image_channels_type())
 
-        self.__set_output_image( self.get_source_image().get_nd_image() )
+        # When the source image is set, the output image is also reset to the source image
+        self.__set_output_image( self.get_source_image().get_nd_image() ) 
 
+    # Set the output image
     def __set_output_image(self, output:np.ndarray):
         self.__output_image = Image.Image(output)
-        print("Image type out: ", self.__output_image.get_image_channels_type())
     
+    # Get the source image
     def get_source_image(self) -> np.ndarray:    
         return self.source_image
     
+    # Get the output image
     def get_output_image(self) -> np.ndarray:
         return self.__output_image    
 
@@ -35,13 +37,12 @@ class Image_Operations:
     def convert_to_gray(self) -> np.ndarray:
         """
         Function to convert the image to grayscale
-        :return: np.ndarray
-        """
+        
+        Arguments:
+            None
+        Returns:
+            np.ndarray
 
-        """
-        cv2.imshow('source', self.source_image)
-        cv2.waitKey(1000)
-        cv2.destroyAllWindows()
         """
 
         src_type = self.get_source_image().get_image_channels_type()
@@ -81,9 +82,11 @@ class Image_Operations:
         :return: np.ndarray
         """
         
+        # Check if the image is in grayscale. If not, convert it to grayscale
         if self.get_source_image().get_image_channels_type() == 'BGR':
             self.set_source_image(self.convert_to_gray())
 
+        # Detect edges using the specified method
         if method == 'roberts':
             self.__set_output_image(ski.filters.roberts(self.get_source_image().get_nd_image()))
         elif method == 'sobel':
@@ -102,9 +105,12 @@ class Image_Operations:
         :param num_classes: int
         :return: np.ndarray
         """
+
+        # Check if the image is in grayscale. If not, convert it to grayscale
         if self.get_source_image().get_image_channels_type() == 'BGR':
             self.set_source_image(self.convert_to_gray())
 
+        # Detect segments using the specified method
         if method == 'multi_otsu':
             self.__set_output_image(ski.filters.threshold_multiotsu(self.get_source_image().get_nd_image(), num_classes))
         elif method == 'chan_vese':

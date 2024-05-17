@@ -22,44 +22,42 @@ class PyqtUI(QMainWindow):
         # Connect the buttons
         self.sourceFolder.clicked.connect(self.load_image)
 
-    def update_images(self):
-        # Label Object name is sourceImage and outputImage
+    def update_source_image(self, label_size = (400, 400) ):
+        """
+        Function to update the source image in the UI
+        
+        Arguments:
+            label_size: tuple, (int, int) - The size of the label to display the image
+        Returns:
+            None
+        """
 
         self.sourceImage.setPixmap(
             QPixmap.fromImage(
                 self.image_operator.get_source_image().get_QImage()
-            )
+            ).scaled(label_size[0], label_size[1])
         )
         self.sourceImage.setAlignment(Qt.AlignCenter)
-
+    
+    def update_output_image(self, label_size = (400, 400) ):
         self.outputImage.setPixmap(
             QPixmap.fromImage(
                 self.image_operator.get_output_image().get_QImage()
-            )
+            ).scaled(label_size[0], label_size[1])
         )
         self.outputImage.setAlignment(Qt.AlignCenter)
 
-
     def load_image(self):
         
-        print("Loading image...")
-
+        # Get the image path
         image_path = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file', 'c:\\', "Image files (*.jpg *.png)")[0]
+        
+        # If the image path is not empty, set the source image
+        if image_path:
+            self.image_operator.set_source_image(image_path)            
 
-        if image_path:
-            print("Image path: ", image_path)
-            self.image_operator.set_source_image(image_path)
-            
-            self.update_images()
-        """
-        if image_path:
-            image = cv2.imread(image_path)
-            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-            image = cv2.resize(image, (self.label.width(), self.label.height()))
-            qimage = QPixmap.fromImage(QImage(image.data, image.shape[1], image.shape[0], image.strides[0], QImage.Format_RGB888))
-            self.label.setPixmap(qimage)
-            self.label.setAlignment(Qt.AlignCenter)
-        """
+            # Name of the label of the source image is sourceImage
+            self.update_source_image( label_size = ( self.sourceImage.width(), self.sourceImage.height() ) )
     
 
 if __name__ == '__main__':
