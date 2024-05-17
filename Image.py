@@ -35,6 +35,17 @@ class Image:
         return 'BGR' if channels == 3 else 'GRAY' 
     
     def get_QImage(self) -> QImage:
+        """
+        Function to get the QImage object from the numpy array
+    
+        Arguments:
+            None
+        
+        Returns:
+            QImage: QImage object - The image object to be displayed in the UI
+        """
+
+
         img = self.get_nd_image()
         return QImage(
             img.data, 

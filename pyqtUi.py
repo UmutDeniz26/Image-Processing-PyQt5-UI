@@ -40,6 +40,15 @@ class PyqtUI(QMainWindow):
         self.sourceImage.setAlignment(Qt.AlignCenter)
     
     def update_output_image(self, label_size = (400, 400) ):
+        """
+        Function to update the output image in the UI
+
+        Arguments:
+            label_size: tuple, (int, int) - The size of the label to display the image
+
+        Returns:
+            None
+        """
         self.outputImage.setPixmap(
             QPixmap.fromImage(
                 self.image_operator.get_output_image().get_QImage()
