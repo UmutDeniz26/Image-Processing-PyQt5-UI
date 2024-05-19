@@ -29,7 +29,7 @@
    <string>Lab Project</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QFrame" name="frame">
+   <widget class="QFrame" name="toolsFrame">
     <property name="geometry">
      <rect>
       <x>50</x>
@@ -159,7 +159,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QFrame" name="frame_2">
+   <widget class="QFrame" name="imagesFrame">
     <property name="geometry">
      <rect>
       <x>50</x>
@@ -176,7 +176,7 @@
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="sourceImageBox">
        <property name="minimumSize">
         <size>
          <width>256</width>
@@ -198,7 +198,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox_2">
+      <widget class="QGroupBox" name="outputImageBox">
        <property name="minimumSize">
         <size>
          <width>256</width>
@@ -228,7 +228,7 @@
      <x>0</x>
      <y>0</y>
      <width>1080</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -242,7 +242,7 @@
      <addaction name="actionSource"/>
      <addaction name="actionOutput"/>
     </widget>
-    <addaction name="actionOpen_Source"/>
+    <addaction name="sourceFolder_menu"/>
     <addaction name="actionSave_Output"/>
     <addaction name="actionSave_As_Output_2"/>
     <addaction name="menuExport_As"/>
@@ -275,7 +275,7 @@
    <addaction name="menuEdge_Detection"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionOpen_Source">
+  <action name="sourceFolder_menu">
    <property name="text">
     <string>Open Source</string>
    </property>

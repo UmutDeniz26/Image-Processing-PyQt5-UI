@@ -24,6 +24,9 @@ class PyqtUI(QMainWindow):
         self.outputSave.clicked.connect(self.save_output_image)
         self.BGR2Gray.clicked.connect( self.convert_to_gray )
 
+        # Connect menu items
+        self.sourceFolder_menu.triggered.connect(self.load_image_button)
+
     def update_source_image(self, label_size = (400, 400) ):
         """
         Function to update the source image in the UI

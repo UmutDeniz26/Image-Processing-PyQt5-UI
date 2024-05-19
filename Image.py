@@ -61,7 +61,7 @@ class Image:
         :param path: str
         :return: None
         """
-        cv2.imwrite(path, self.get_nd_image())
+        cv2.imwrite(path+"/out.jpg", self.get_nd_image())
     
 if __name__ == '__main__':
     image = Image('src/images/lena.png')
