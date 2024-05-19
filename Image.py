@@ -55,6 +55,14 @@ class Image:
             QImage.Format_BGR888 if self.get_image_channels_type() == 'BGR' else QImage.Format_Grayscale8
         )
     
+    def save_image(self, path:str):
+        """
+        Function to save the image to the specified path
+        :param path: str
+        :return: None
+        """
+        cv2.imwrite(path, self.get_nd_image())
+    
 if __name__ == '__main__':
     image = Image('src/images/lena.png')
     

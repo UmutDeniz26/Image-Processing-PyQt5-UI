@@ -20,7 +20,9 @@ class PyqtUI(QMainWindow):
         self.image_operator = Image_Operations.Image_Operations()
         
         # Connect the buttons
-        self.sourceFolder.clicked.connect(self.load_image)
+        self.sourceFolder.clicked.connect(self.load_image_button)
+        self.outputSave.clicked.connect(self.save_output_image)
+        self.BGR2Gray.clicked.connect( self.convert_to_gray )
 
     def update_source_image(self, label_size = (400, 400) ):
         """
@@ -48,7 +50,7 @@ class PyqtUI(QMainWindow):
 
         Returns:
             None
-        """
+        """ 
         self.outputImage.setPixmap(
             QPixmap.fromImage(
                 self.image_operator.get_output_image().get_QImage()
@@ -56,7 +58,7 @@ class PyqtUI(QMainWindow):
         )
         self.outputImage.setAlignment(Qt.AlignCenter)
 
-    def load_image(self):
+    def load_image_button(self):
         
         # Get the image path
         image_path = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file', 'c:\\', "Image files (*.jpg *.png)")[0]
@@ -68,6 +70,26 @@ class PyqtUI(QMainWindow):
             # Name of the label of the source image is sourceImage
             self.update_source_image( label_size = ( self.sourceImage.width(), self.sourceImage.height() ) )
     
+    def save_output_image(self):
+
+        # Get the folder path
+        folder_path = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select folder')
+
+        # If the folder path is not empty, save the output image
+        if folder_path:
+            self.image_operator.get_output_image().save_image(folder_path)
+
+    def convert_to_gray(self):
+        """
+        Function to convert the image to grayscale
+            Arguments:
+                None
+            Returns:
+                None
+        """
+        
+        self.image_operator.convert_to_gray()
+        self.update_output_image( label_size = ( self.outputImage.width(), self.outputImage.height() ) )
 
 if __name__ == '__main__':
     print("Testing PyqtUI class:")

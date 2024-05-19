@@ -34,7 +34,7 @@
      <rect>
       <x>50</x>
       <y>30</y>
-      <width>911</width>
+      <width>640</width>
       <height>89</height>
      </rect>
     </property>
@@ -63,12 +63,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="sourceSave">
+         <widget class="QPushButton" name="sourceStar">
           <property name="text">
            <string/>
-          </property>
-          <property name="icon">
-           <iconset theme="sourceSave"/>
           </property>
          </widget>
         </item>
@@ -92,6 +89,10 @@
          <widget class="QPushButton" name="outputSave">
           <property name="text">
            <string/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>src/icons/UI Basic GLYPH-68.svg</normaloff>src/icons/UI Basic GLYPH-68.svg</iconset>
           </property>
          </widget>
         </item>
@@ -140,7 +141,7 @@
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
-         <widget class="QPushButton" name="converson_1">
+         <widget class="QPushButton" name="BGR2Gray">
           <property name="text">
            <string/>
           </property>
