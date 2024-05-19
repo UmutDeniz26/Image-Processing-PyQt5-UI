@@ -52,7 +52,7 @@
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QPushButton" name="sourceFolder">
+         <widget class="QPushButton" name="source_folder">
           <property name="text">
            <string/>
           </property>
@@ -63,14 +63,14 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="sourceStar">
+         <widget class="QPushButton" name="source_star">
           <property name="text">
            <string/>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="sourceRedo">
+         <widget class="QPushButton" name="source_redo">
           <property name="text">
            <string/>
           </property>
@@ -86,7 +86,7 @@
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QPushButton" name="outputSave">
+         <widget class="QPushButton" name="output_save">
           <property name="text">
            <string/>
           </property>
@@ -97,35 +97,35 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="outputImport">
+         <widget class="QPushButton" name="output_import">
           <property name="text">
            <string/>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="outputSaveAs">
+         <widget class="QPushButton" name="output_save_as">
           <property name="text">
            <string/>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="outputUndo">
+         <widget class="QPushButton" name="output_undo">
           <property name="text">
            <string/>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="outputRedo">
+         <widget class="QPushButton" name="output_redo">
           <property name="text">
            <string/>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="outputStar">
+         <widget class="QPushButton" name="output_star">
           <property name="text">
            <string/>
           </property>
@@ -141,7 +141,7 @@
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
-         <widget class="QPushButton" name="BGR2Gray">
+         <widget class="QPushButton" name="bgr_2_gray">
           <property name="text">
            <string/>
           </property>
@@ -188,7 +188,7 @@
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_6">
         <item>
-         <widget class="QLabel" name="sourceImage">
+         <widget class="QLabel" name="source_image">
           <property name="text">
            <string/>
           </property>
@@ -210,7 +210,7 @@
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_7">
         <item>
-         <widget class="QLabel" name="outputImage">
+         <widget class="QLabel" name="output_image">
           <property name="text">
            <string/>
           </property>
@@ -235,23 +235,33 @@
     <property name="title">
      <string>File</string>
     </property>
-    <widget class="QMenu" name="menuExport_As">
+    <widget class="QMenu" name="export_menu">
      <property name="title">
       <string>Export As</string>
      </property>
-     <addaction name="actionSource"/>
-     <addaction name="actionOutput"/>
+     <addaction name="source_export_menu"/>
+     <addaction name="output_export_menu"/>
     </widget>
-    <addaction name="sourceFolder_menu"/>
-    <addaction name="actionSave_Output"/>
-    <addaction name="actionSave_As_Output_2"/>
-    <addaction name="menuExport_As"/>
-    <addaction name="actionExit"/>
+    <addaction name="source_folder_menu"/>
+    <addaction name="output_save_menu"/>
+    <addaction name="output_save_as_menu"/>
+    <addaction name="export_menu"/>
+    <addaction name="exit_menu"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
      <string>Edit</string>
     </property>
+    <widget class="QMenu" name="menuClear">
+     <property name="title">
+      <string>Clear</string>
+     </property>
+     <addaction name="source_clear_menu"/>
+     <addaction name="output_clear_menu"/>
+    </widget>
+    <addaction name="menuClear"/>
+    <addaction name="output_undo_menu"/>
+    <addaction name="output_redo_menu"/>
    </widget>
    <widget class="QMenu" name="menuConversion">
     <property name="title">
@@ -275,12 +285,15 @@
    <addaction name="menuEdge_Detection"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="sourceFolder_menu">
+  <action name="source_folder_menu">
    <property name="text">
     <string>Open Source</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
-  <action name="actionSave_Output">
+  <action name="output_save_menu">
    <property name="text">
     <string>Save Output</string>
    </property>
@@ -290,24 +303,47 @@
     <string>Save as Output</string>
    </property>
   </action>
-  <action name="actionSave_As_Output_2">
+  <action name="output_save_as_menu">
    <property name="text">
     <string>Save As Output</string>
    </property>
   </action>
-  <action name="actionExit">
+  <action name="exit_menu">
    <property name="text">
     <string>Exit</string>
    </property>
+   <property name="shortcut">
+    <string>Shift+F4</string>
+   </property>
   </action>
-  <action name="actionOutput">
+  <action name="output_export_menu">
    <property name="text">
     <string>Output</string>
    </property>
   </action>
-  <action name="actionSource">
+  <action name="source_export_menu">
    <property name="text">
     <string>Source</string>
+   </property>
+  </action>
+  <action name="output_undo_menu">
+   <property name="text">
+    <string>Undo Output</string>
+   </property>
+  </action>
+  <action name="output_redo_menu">
+   <property name="text">
+    <string>Redo Output</string>
+   </property>
+  </action>
+  <action name="source_clear_menu">
+   <property name="text">
+    <string>Source</string>
+   </property>
+  </action>
+  <action name="output_clear_menu">
+   <property name="text">
+    <string>Output</string>
    </property>
   </action>
  </widget>
