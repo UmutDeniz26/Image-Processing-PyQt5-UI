@@ -34,7 +34,7 @@
      <rect>
       <x>50</x>
       <y>30</y>
-      <width>762</width>
+      <width>911</width>
       <height>89</height>
      </rect>
     </property>
@@ -57,7 +57,8 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset theme="Load"/>
+           <iconset>
+            <normaloff>src/icons/UI Basic GLYPH-84.svg</normaloff>src/icons/UI Basic GLYPH-84.svg</iconset>
           </property>
          </widget>
         </item>
@@ -65,6 +66,9 @@
          <widget class="QPushButton" name="sourceSave">
           <property name="text">
            <string/>
+          </property>
+          <property name="icon">
+           <iconset theme="sourceSave"/>
           </property>
          </widget>
         </item>
