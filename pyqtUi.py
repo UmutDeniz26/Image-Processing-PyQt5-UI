@@ -23,6 +23,7 @@ class PyqtUI(QMainWindow):
         self.output_save.clicked.connect(self.save_output_image)
         self.output_save_as.clicked.connect(self.save_as_output_image)
         self.bgr_2_gray.clicked.connect(self.convert_to_gray)
+        self.multi_otsu.clicked.connect(self.segment_multi_otsu)
         
         # Connect menu items
         self.source_folder_menu.triggered.connect(self.source_folder.click)
@@ -157,6 +158,12 @@ class PyqtUI(QMainWindow):
         self.image_operator.convert_to_gray()
         self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
 
+    def segment_multi_otsu(self):
+        self.image_operator.segment_image(method='multi_otsu')
+
+        self.image_operator.set_output_image(self.image_operator.get_output_image().get_nd_image().astype(np.uint8))
+        
+        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
 
 
 if __name__ == '__main__':
