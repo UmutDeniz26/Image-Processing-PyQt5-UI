@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import skimage as ski
 
-import Image
+from Image import Image
 
 class Image_Operations:
     def __init__(self, image:np.ndarray = None):
@@ -13,74 +13,57 @@ class Image_Operations:
         
         if image is not None:
             self.set_source_image( image )
+
+        # Initialize the image history for redo and undo operations
+        self.source_image_history = {"image_history":[], "current_index":-1}
+        self.output_image_history = {"image_history":[], "current_index":-1}
     
     # Set the source image
     def set_source_image(self, image:np.ndarray):
-        self.source_image = Image.Image(image)
-
-        # When the source image is set, the output image is also reset to the source image
-        self.__set_output_image( self.get_source_image().get_nd_image() ) 
+        self.source_image = Image(image)
+        index = self.source_image_history["current_index"]
+        self.source_image_history["image_history"].insert(index+1, self.source_image)
 
     # Set the output image
     def __set_output_image(self, output:np.ndarray):
-        self.__output_image = Image.Image(output)
+        self.__output_image = Image(output)
+        index = self.output_image_history["current_index"]
+        self.output_image_history["image_history"].insert(index+1, self.__output_image)
     
     # Get the source image
     def get_source_image(self) -> np.ndarray:    
-        return self.source_image
+        index = self.source_image_history["current_index"]
+        return self.source_image_history["image_history"][index]
     
     # Get the output image
     def get_output_image(self) -> np.ndarray:
-        return self.__output_image    
+        index = self.output_image_history["current_index"]
+        return self.output_image_history["image_history"][index] 
 
-
-    def convert_to_gray(self) -> np.ndarray:
-        """
-        Function to convert the image to grayscale
-        
-        Arguments:
-            None
-        Returns:
-            np.ndarray
-
-        """
-
+    # Function to convert the image to a specified color space
+    def convesion_actions(self, method:str='gray') -> np.ndarray:
         src_type = self.get_source_image().get_image_channels_type()
-        if src_type == 'BGR':
-            cvt_type = cv2.COLOR_BGR2GRAY
-        elif src_type == 'GRAY':
-            return
+
+        if method == 'gray':
+            if src_type == 'BGR':
+                cvt_type = cv2.COLOR_BGR2GRAY
+            elif src_type == 'GRAY':
+                return
+            else:
+                raise ValueError('Invalid image type') 
+        elif method == 'hsv':
+            if src_type == 'BGR':
+                cvt_type = cv2.COLOR_BGR2HSV
+            elif src_type == 'GRAY':
+                return
         else:
-            raise ValueError('Invalid image type')
-          
-        self.__set_output_image(cv2.cvtColor(self.get_source_image().get_nd_image(), cvt_type))
-        return self.get_output_image().get_nd_image()
-    
-    def convert_to_hsv(self) -> np.ndarray:
-        """
-        Function to convert the image to HSV
-        :return: np.ndarray
-        """
-        src_type = self.get_source_image().get_image_channels_type()
-        
-        if src_type == 'BGR':
-            cvt_type = cv2.COLOR_BGR2HSV
-        elif src_type == 'GRAY':
-            return
-        else:
-            raise ValueError('Invalid image type')
+            raise ValueError('Invalid method for conversion')
         
         self.__set_output_image(cv2.cvtColor(self.get_source_image().get_nd_image(), cvt_type))
         return self.get_output_image().get_nd_image()
-    
-    def edge_detection(self, method:str='roberts', threshold1:int=100, threshold2:int=200 ) -> np.ndarray:
-        """
-        Function to detect edges in the image
-        :param method: str
-        :param threshold1: int
-        :param threshold2: int
-        :return: np.ndarray
-        """
+
+    # Function to detect edges in the image
+    def edge_detection_actions(self, method:str='roberts', threshold1:int=100, threshold2:int=200 ) -> np.ndarray:
         
         # Check if the image is in grayscale. If not, convert it to grayscale
         if self.get_source_image().get_image_channels_type() == 'BGR':
@@ -98,14 +81,9 @@ class Image_Operations:
         else:
             raise ValueError('Invalid method for edge detection')
     
+    # Function to segment the image
     def segment_image(self, method:str='multi_otsu', num_classes:int=3) -> np.ndarray:
-        """
-        Function to segment the image
-        :param method: str
-        :param num_classes: int
-        :return: np.ndarray
-        """
-
+    
         # Check if the image is in grayscale. If not, convert it to grayscale
         if self.get_source_image().get_image_channels_type() == 'BGR':
             self.set_source_image(self.convert_to_gray())
@@ -120,29 +98,9 @@ class Image_Operations:
         else:
             raise ValueError('Invalid method for segmentation')
         
-    def show_output_image(self):
-        """
-        Function to display the output image
-        """
-        try:
-            cv2.imshow('output', self.get_output_image().get_nd_image())
-            cv2.waitKey(1000)
-            cv2.destroyAllWindows()
-        except:
-            self.__set_output_image(self.get_output_image().get_nd_image().astype(np.uint8))
-            cv2.imshow('output', self.get_output_image().get_nd_image())
-            cv2.waitKey(1000)
-            cv2.destroyAllWindows()
-            
 if __name__ == '__main__':
     print(" Testing image_operator class: ")    
     image = cv2.imread('src/images/lena.png', cv2.IMREAD_COLOR)
     img_op = Image_Operations(image)
-
     img_op.convert_to_gray()
-
-    img_op.show_output_image()
-
-    img_op.edge_detection( method='sobel' )
-
-    img_op.show_output_image()
+    img_op.edge_detection_actions( method='sobel' )

@@ -32,9 +32,9 @@
    <widget class="QFrame" name="toolsFrame">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>10</x>
       <y>30</y>
-      <width>640</width>
+      <width>1061</width>
       <height>89</height>
      </rect>
     </property>
@@ -72,7 +72,7 @@
         <item>
          <widget class="QPushButton" name="source_redo">
           <property name="text">
-           <string/>
+           <string>redo</string>
           </property>
          </widget>
         </item>
@@ -99,28 +99,28 @@
         <item>
          <widget class="QPushButton" name="output_import">
           <property name="text">
-           <string/>
+           <string>import</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="output_save_as">
           <property name="text">
-           <string/>
+           <string>save as</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="output_undo">
           <property name="text">
-           <string/>
+           <string>undo</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="output_redo">
           <property name="text">
-           <string/>
+           <string>redo</string>
           </property>
          </widget>
         </item>
@@ -143,14 +143,14 @@
         <item>
          <widget class="QPushButton" name="bgr_2_gray">
           <property name="text">
-           <string/>
+           <string>Gray</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="converson_2">
+         <widget class="QPushButton" name="bgr_2_hsv">
           <property name="text">
-           <string/>
+           <string>HSV</string>
           </property>
          </widget>
         </item>
@@ -162,9 +162,9 @@
    <widget class="QFrame" name="imagesFrame">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>10</x>
       <y>260</y>
-      <width>941</width>
+      <width>1051</width>
       <height>421</height>
      </rect>
     </property>
