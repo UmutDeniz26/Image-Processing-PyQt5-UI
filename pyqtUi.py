@@ -23,7 +23,7 @@ class PyqtUI(QMainWindow):
         self.output_save.clicked.connect(self.save_output_image)
         self.output_save_as.clicked.connect(self.save_as_output_image)
         self.bgr_2_gray.clicked.connect(self.convert_to_gray)
-        self.bgr_2_hsv.clicked.connect(self.convert_to_hsv)
+        self.multi_otsu.clicked.connect(self.segment_multi_otsu)
         
         # Connect menu items
         self.source_folder_menu.triggered.connect(self.source_folder.click)

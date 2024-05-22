@@ -47,6 +47,13 @@ class Image:
 
 
         img = self.get_nd_image()
+
+
+        # self.image_operator.get_output_image().get_nd_image() => array([ 92, 150], dtype=uint8)
+        # Convert this to cv image
+        if len(img.shape) == 1:
+            img = img.reshape(img.shape[0], 1)
+
         return QImage(
             img.data, 
             img.shape[1],
