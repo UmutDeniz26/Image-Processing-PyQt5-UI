@@ -21,14 +21,15 @@ class Image_Operations:
     # Set the source image
     def set_source_image(self, image:np.ndarray):
         self.source_image = Image(image)
-        index = self.source_image_history["current_index"]
-        self.source_image_history["image_history"].insert(index+1, self.source_image)
+        self.source_image_history["image_history"].append(self.source_image)
 
     # Set the output image
-    def __set_output_image(self, output:np.ndarray):
-        self.__output_image = Image(output)
-        index = self.output_image_history["current_index"]
-        self.output_image_history["image_history"].insert(index+1, self.__output_image)
+    def set_output_image(self, output:np.ndarray):
+        if type(output) != Image:
+            self.__output_image = Image(output)
+
+        self.output_image_history["current_index"] += 1
+        self.output_image_history["image_history"].append(self.__output_image)
     
     # Get the source image
     def get_source_image(self) -> np.ndarray:    
@@ -39,6 +40,25 @@ class Image_Operations:
     def get_output_image(self) -> np.ndarray:
         index = self.output_image_history["current_index"]
         return self.output_image_history["image_history"][index] 
+    
+    def undo_output_image(self):
+        self.output_image_history["current_index"] -= 1 if self.output_image_history["current_index"] > 0 else 0
+
+        # I didn't use set function because I don't want to update the history list
+        self.__output_image = self.output_image_history["image_history"][self.output_image_history["current_index"]]
+
+    def redo_output_image(self):
+        self.output_image_history["current_index"] +=\
+            1 if self.output_image_history["current_index"] < len(self.output_image_history["image_history"]) - 1 else 0
+
+        # I didn't use set function because I don't want to update the history list
+        self.__output_image = self.output_image_history["image_history"][self.output_image_history["current_index"]]
+
+    def undo_source_image(self):
+        self.source_image_history["current_index"] -= 1
+
+        # I didn't use set function because I don't want to update the history list 
+        self.source_image = self.source_image_history["image_history"][self.source_image_history["current_index"]]
 
     # Function to convert the image to a specified color space
     def convesion_actions(self, method:str='gray') -> np.ndarray:
@@ -59,25 +79,24 @@ class Image_Operations:
         else:
             raise ValueError('Invalid method for conversion')
         
-        self.__set_output_image(cv2.cvtColor(self.get_source_image().get_nd_image(), cvt_type))
-        return self.get_output_image().get_nd_image()
+        return cv2.cvtColor(self.get_source_image().get_nd_image(), cvt_type)
 
     # Function to detect edges in the image
     def edge_detection_actions(self, method:str='roberts', threshold1:int=100, threshold2:int=200 ) -> np.ndarray:
         
         # Check if the image is in grayscale. If not, convert it to grayscale
         if self.get_source_image().get_image_channels_type() == 'BGR':
-            self.set_source_image(self.convert_to_gray())
+            self.set_source_image(self.convesion_actions(method='gray'))
 
         # Detect edges using the specified method
         if method == 'roberts':
-            self.__set_output_image(ski.filters.roberts(self.get_source_image().get_nd_image()))
+            self.set_output_image(ski.filters.roberts(self.get_source_image().get_nd_image()))
         elif method == 'sobel':
-            self.__set_output_image(ski.filters.sobel(self.get_source_image().get_nd_image()))
+            self.set_output_image(ski.filters.sobel(self.get_source_image().get_nd_image()))
         elif method == 'scharr':
-            self.__set_output_image(ski.filters.scharr(self.get_source_image().get_nd_image()))
+            self.set_output_image(ski.filters.scharr(self.get_source_image().get_nd_image()))
         elif method == 'prewitt':
-            self.__set_output_image(ski.filters.prewitt(self.get_source_image().get_nd_image()))
+            self.set_output_image(ski.filters.prewitt(self.get_source_image().get_nd_image()))
         else:
             raise ValueError('Invalid method for edge detection')
     
@@ -86,17 +105,19 @@ class Image_Operations:
     
         # Check if the image is in grayscale. If not, convert it to grayscale
         if self.get_source_image().get_image_channels_type() == 'BGR':
-            self.set_source_image(self.convert_to_gray())
+            img = self.convesion_actions(method='gray')
 
         # Detect segments using the specified method
         if method == 'multi_otsu':
-            self.__set_output_image(ski.filters.threshold_multiotsu(self.get_source_image().get_nd_image(), num_classes))
+            ret = ski.filters.threshold_multiotsu(img, num_classes)
         elif method == 'chan_vese':
-            self.__set_output_image(ski.segmentation.chan_vese(self.get_source_image().get_nd_image(), num_classes))
-        elif method == 'morphological_snakes':
-            self.__set_output_image(ski.segmentation.morphological_chan_vese(self.get_source_image().get_nd_image(), num_classes))
+            ret = ski.segmentation.chan_vese(img, num_classes)
+        elif method == 'morph_snakes':
+            ret = ski.segmentation.morphological_chan_vese(img, num_classes)
         else:
-            raise ValueError('Invalid method for segmentation')
+            raise ValueError('Invalid method for segmentation, method: ', method)
+        
+        return ret
         
 if __name__ == '__main__':
     print(" Testing image_operator class: ")    

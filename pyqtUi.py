@@ -20,24 +20,47 @@ class PyqtUI(QMainWindow):
         
         # Connect the buttons
         self.source_folder.clicked.connect(self.load_image_button)
+        
         self.output_save.clicked.connect(self.save_output_image)
         self.output_save_as.clicked.connect(self.save_as_output_image)
+        
         self.bgr_2_gray.clicked.connect(self.convert_to_gray)
-        self.multi_otsu.clicked.connect(self.segment_multi_otsu)
+        self.bgr_2_hsv.clicked.connect(self.convert_to_hsv)
+        
+        self.segment_multi_otsu.clicked.connect(self.segment_multi_otsu_f)
+        self.segment_chan_vese.clicked.connect(self.segment_chan_vese_f)
+        self.segment_moprh_snakes.clicked.connect(self.segment_moprh_snakes_f)
+
+        self.output_undo.clicked.connect(self.undo_output_image)
+        self.output_redo.clicked.connect(self.redo_output_image)
         
         # Connect menu items
         self.source_folder_menu.triggered.connect(self.source_folder.click)
         self.output_save_menu.triggered.connect(self.output_save.click)
         self.output_save_as_menu.triggered.connect(self.output_save_as.click)
         self.exit_menu.triggered.connect(self.exit_app)
+        
         self.source_clear_menu.triggered.connect(self.clear_source_image)
+        self.output_clear_menu.triggered.connect(self.clear_output_image)
+
+        self.output_undo_menu.triggered.connect(self.output_undo.click)
+        self.output_redo_menu.triggered.connect(self.output_redo.click)
+
+        self.admin_print_menu.triggered.connect(self.admin_print)
 
 
         # Button lists
         self.all_buttons = [
-            self.source_folder, self.source_folder_menu, self.source_export_menu, self.source_clear_menu
+            self.source_folder, self.source_folder_menu, self.source_export_menu, self.source_clear_menu, self.source_export, self.source_undo
+                    
+            
             ,self.output_save, self.output_save_as,self.output_undo_menu,self.output_save_menu, self.output_save_as_menu, self.output_export_menu,self.output_clear_menu,self.output_redo_menu
+            ,self.output_export, self.output_undo, self.output_redo
+            
             ,self.bgr_2_gray, self.bgr_2_hsv
+
+            ,self.segment_multi_otsu, self.segment_chan_vese, self.segment_moprh_snakes
+
             ,self.exit_menu
         ]
 
@@ -56,7 +79,12 @@ class PyqtUI(QMainWindow):
 
 
 
+    def admin_print(self):
+        print("Histories. \nSource")
+        print(self.image_operator.source_image_history)
 
+        print("Output")
+        print(self.image_operator.output_image_history)
 
 
 
@@ -116,7 +144,8 @@ class PyqtUI(QMainWindow):
 
     ###################### Image Operations ######################
 
-    # Function to update the source image
+
+    # Display functions
     def update_source_image(self, label_size=(400, 400)):
         self.source_image.setPixmap(
             QPixmap.fromImage(
@@ -125,31 +154,68 @@ class PyqtUI(QMainWindow):
         )
         self.source_image.setAlignment(Qt.AlignCenter)
     
-    # Function to update the output image
     def update_output_image(self, label_size=(400, 400)):
-        self.output_image.setPixmap(
-            QPixmap.fromImage(
-                self.image_operator.get_output_image().get_QImage()
-            ).scaled(label_size[0], label_size[1])
-        )
-        self.output_image.setAlignment(Qt.AlignCenter)
+        try:
+            self.output_image.setPixmap(
+                QPixmap.fromImage(
+                    self.image_operator.get_output_image().get_QImage()
+                ).scaled(label_size[0], label_size[1])
+            )
+            self.output_image.setAlignment(Qt.AlignCenter)
+        except:
+            if len (self.image_operator.get_output_image().get_nd_image().shape) < 2:
+                # it means img is numpy array that comes from segmentation
+                self.output_image.setPixmap(
+                    QPixmap.fromImage(
+                        self.image_operator.get_output_image().get_nd_image()
+                    ).scaled(label_size[0], label_size[1])
+                )
+                self.output_image.setAlignment(Qt.AlignCenter)
+            else:
+                print("Error in update_output_image, image shape: ", self.image_operator.get_output_image().get_nd_image().shape)
+            
 
+    # Conversion functions
     def convert_to_gray(self):
-        self.image_operator.convesion_actions(method='gray')
+        img = self.image_operator.convesion_actions(method='gray')
+        self.image_operator.set_output_image(img)
         self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
 
     def convert_to_hsv(self):
-        self.image_operator.convesion_actions(method='hsv')
+        img = self.image_operator.convesion_actions(method='hsv')
+        self.image_operator.set_output_image(img)
         self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
 
+
+    # Clear functions
     def clear_source_image(self):
-        self.image_operator.set_source_image(None)
-        self.source_image_path = None
+        
+        self.image_operator.set_source_image(None);self.source_image_path = None
+        self.image_operator.source_image_history = {"image_history":[], "current_index":-1}
+
         self.change_button_state(self.all_buttons, False)
         self.source_image.clear()
 
+    def clear_output_image(self):
+        self.image_operator.output_image_history = {"image_history":[], "current_index":-1}
+        self.output_image.clear()
 
 
+    # Segmentation functions
+    def segment_multi_otsu_f(self):
+        img = self.image_operator.segment_image(method='multi_otsu')
+        self.image_operator.set_output_image(img)
+        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
+
+    def segment_chan_vese_f(self):
+        img = self.image_operator.segment_image(method='chan_vese')
+        self.image_operator.set_output_image(img)
+        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
+
+    def segment_moprh_snakes_f(self):
+        img = self.image_operator.segment_image(method='morph_snakes')
+        self.image_operator.set_output_image(img)
+        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
 
 
 
@@ -169,6 +235,14 @@ class PyqtUI(QMainWindow):
         for button in self.all_buttons:
             if button not in self.always_display_buttons:
                 button.setDisabled(False) if state else button.setDisabled(True)
+
+    def undo_output_image(self):
+        self.image_operator.undo_output_image()
+        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
+
+    def redo_output_image(self):
+        self.image_operator.redo_output_image()
+        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
 
 
 if __name__ == '__main__':
