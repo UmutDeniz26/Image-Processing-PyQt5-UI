@@ -7,7 +7,7 @@ from PyQt5.QtCore import Qt
 import sys
 import cv2
 import numpy as np
-
+import os
 import Image_Operations
 
 class PyqtUI(QMainWindow):
@@ -133,31 +133,47 @@ class PyqtUI(QMainWindow):
             self.image_operator.get_output_image().save_image(self.source_image_path)
 
     def save_as_output_image(self):
-        # Get the folder path
-        image_save_path = QtWidgets.QFileDialog.getSaveFileName(
-            self, 'Save file', "output.jpg", "Image files (*.jpg)")[0]
 
-        # If the folder path is not empty, save the output image
-        if image_save_path:
-            self.image_operator.get_output_image().save_image(image_save_path)
+        while True:
+            # Get the folder path
+            image_save_path = QtWidgets.QFileDialog.getSaveFileName(
+                self, 'Save file', "output.jpg", "Image files (*.jpg)")[0]
+
+            # If the folder path is not empty, save the output image, check extension is jpg
+            if image_save_path and image_save_path.endswith('.jpg'):
+                self.image_operator.get_output_image().save_image(image_save_path)
+                break
+            else:
+                print("Please select a valid path with .jpg extension")
 
     def export_output_image(self):
-        # Custom extension choice (jpg, png, bmp)
-        extension = QtWidgets.QFileDialog.getSaveFileName(
-            self, 'Save file', "output.jpg", "Image files (*.jpg *.png *.bmp)")[0]
-        
-        # If the folder path is not empty, save the output image
-        if extension:
-            self.image_operator.get_output_image().save_image(extension)
+        while True:
+            # Custom extension choice (jpg, png, bmp)
+            image_save_path = QtWidgets.QFileDialog.getSaveFileName(
+                self, 'Save file', "output.jpg", "Image files (*.jpg *.png *.bmp)")[0]
+            
+            # If the folder path is not empty, save the output image, check extension is jpg or png or bmp
+            if image_save_path and \
+            (image_save_path.endswith('.jpg') or image_save_path.endswith('.png') or image_save_path.endswith('.bmp')):
+                self.image_operator.get_output_image().save_image(image_save_path)
+                break
+            else:
+                print("Please select a valid path with .jpg or .png or .bmp extension")
+
 
     def export_source_image(self):
-        # Custom extension choice (jpg, png, bmp)
-        extension = QtWidgets.QFileDialog.getSaveFileName(
-            self, 'Save file', "source.jpg", "Image files (*.jpg *.png *.bmp)")[0]
-        
-        # If the folder path is not empty, save the output image
-        if extension:
-            self.image_operator.get_source_image().save_image(extension)
+        while True:
+            # Custom extension choice (jpg, png, bmp)
+            image_save_path = QtWidgets.QFileDialog.getSaveFileName(
+                self, 'Save file', "source.jpg", "Image files (*.jpg *.png *.bmp)")[0]
+            
+            # If the folder path is not empty, save the output image
+            if image_save_path and \
+            (image_save_path.endswith('.jpg') or image_save_path.endswith('.png') or image_save_path.endswith('.bmp')):
+                self.image_operator.get_source_image().save_image(image_save_path)
+                break
+            else:
+                print("Please select a valid path with .jpg or .png or .bmp extension")
 
 
 
