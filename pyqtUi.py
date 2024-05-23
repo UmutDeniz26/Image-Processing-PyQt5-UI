@@ -31,6 +31,11 @@ class PyqtUI(QMainWindow):
         self.segment_chan_vese.clicked.connect(self.segment_chan_vese_f)
         self.segment_moprh_snakes.clicked.connect(self.segment_moprh_snakes_f)
 
+        self.edge_roberts.clicked.connect(self.edge_roberts_f)
+        self.edge_sobel.clicked.connect(self.edge_sobel_f)
+        self.edge_scharr.clicked.connect(self.edge_scharr_f)
+        self.edge_prewitt.clicked.connect(self.edge_prewitt_f)
+
         self.output_undo.clicked.connect(self.undo_output_image)
         self.output_redo.clicked.connect(self.redo_output_image)
         
@@ -60,6 +65,8 @@ class PyqtUI(QMainWindow):
             ,self.bgr_2_gray, self.bgr_2_hsv
 
             ,self.segment_multi_otsu, self.segment_chan_vese, self.segment_moprh_snakes
+
+            ,self.edge_roberts, self.edge_sobel, self.edge_scharr, self.edge_prewitt
 
             ,self.exit_menu
         ]
@@ -218,6 +225,26 @@ class PyqtUI(QMainWindow):
         self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
 
 
+    # Edge detection functions
+    def edge_roberts_f(self):
+        img = self.image_operator.edge_detection_actions(method='roberts')
+        self.image_operator.set_output_image(img)
+        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
+
+    def edge_sobel_f(self):
+        img = self.image_operator.edge_detection_actions(method='sobel')
+        self.image_operator.set_output_image(img)
+        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
+
+    def edge_scharr_f(self):
+        img = self.image_operator.edge_detection_actions(method='scharr')
+        self.image_operator.set_output_image(img)
+        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
+
+    def edge_prewitt_f(self):
+        img = self.image_operator.edge_detection_actions(method='prewitt')
+        self.image_operator.set_output_image(img)
+        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
 
 
 
