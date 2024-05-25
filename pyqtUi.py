@@ -139,8 +139,11 @@ class PyqtUI(QMainWindow):
             image_save_path = QtWidgets.QFileDialog.getSaveFileName(
                 self, 'Save file', "output.jpg", "Image files (*.jpg)")[0]
 
+            if not image_save_path:
+                break
+
             # If the folder path is not empty, save the output image, check extension is jpg
-            if image_save_path and image_save_path.endswith('.jpg'):
+            if image_save_path.endswith('.jpg'):
                 self.image_operator.get_output_image().save_image(image_save_path)
                 break
             else:
@@ -152,13 +155,16 @@ class PyqtUI(QMainWindow):
             image_save_path = QtWidgets.QFileDialog.getSaveFileName(
                 self, 'Save file', "output.jpg", "Image files (*.jpg *.png *.bmp)")[0]
             
+            if not image_save_path:
+                break
+
             # If the folder path is not empty, save the output image, check extension is jpg or png or bmp
-            if image_save_path and \
-            (image_save_path.endswith('.jpg') or image_save_path.endswith('.png') or image_save_path.endswith('.bmp')):
+            if (image_save_path.endswith('.jpg') or image_save_path.endswith('.png') or image_save_path.endswith('.bmp')):
                 self.image_operator.get_output_image().save_image(image_save_path)
                 break
             else:
-                print("Please select a valid path with .jpg or .png or .bmp extension")
+                print("Please select a valid path with .jpg or .png or .bmp extension : ", image_save_path)
+
 
 
     def export_source_image(self):
@@ -168,12 +174,15 @@ class PyqtUI(QMainWindow):
                 self, 'Save file', "source.jpg", "Image files (*.jpg *.png *.bmp)")[0]
             
             # If the folder path is not empty, save the output image
-            if image_save_path and \
-            (image_save_path.endswith('.jpg') or image_save_path.endswith('.png') or image_save_path.endswith('.bmp')):
+            if not image_save_path:
+                break
+
+            # If the folder path is not empty, save the output image, check extension is jpg or png or bmp
+            if (image_save_path.endswith('.jpg') or image_save_path.endswith('.png') or image_save_path.endswith('.bmp')):
                 self.image_operator.get_source_image().save_image(image_save_path)
                 break
             else:
-                print("Please select a valid path with .jpg or .png or .bmp extension")
+                print("Please select a valid path with .jpg or .png or .bmp extension : ", image_save_path)
 
 
 
