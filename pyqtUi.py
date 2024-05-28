@@ -18,19 +18,19 @@ class PyqtUI(QMainWindow):
 
         self.image_operator = Image_Operations.Image_Operations()
         
-        # Connect the buttons
+        ###################### File Operations ######################
     
         # Source operations
-        self.source_folder.clicked.connect(self.load_image_button)
-        
+        self.source_folder.clicked.connect(self.load_image_button);self.source_folder_menu.triggered.connect(self.source_folder.click)
+        self.source_export.clicked.connect(self.export_source_image);self.source_export_menu.triggered.connect(self.source_export.click)
 
         # Output operations
-        self.output_save.clicked.connect(self.save_output_image)
-        self.output_save_as.clicked.connect(self.save_as_output_image)
-        self.output_export.clicked.connect(self.export_output_image)
-        self.source_export.clicked.connect(self.export_source_image)
+        self.output_save.clicked.connect(self.save_output_image);self.output_save_menu.triggered.connect(self.output_save.click)
+        self.output_save_as.clicked.connect(self.save_as_output_image);self.output_save_as_menu.triggered.connect(self.output_save_as.click)
+        self.output_export.clicked.connect(self.export_output_image);self.output_export_menu.triggered.connect(self.output_export.click)
         
-        # Image operations
+        
+        ###################### Image Operations ######################
 
         # Conversion operations
         self.bgr_2_gray.clicked.connect(self.convert_to_gray)
@@ -41,32 +41,21 @@ class PyqtUI(QMainWindow):
         self.segment_chan_vese.clicked.connect(self.segment_chan_vese_f)
         self.segment_moprh_snakes.clicked.connect(self.segment_moprh_snakes_f)
 
+        # Edge detection operations
         self.edge_roberts.clicked.connect(self.edge_roberts_f)
         self.edge_sobel.clicked.connect(self.edge_sobel_f)
         self.edge_scharr.clicked.connect(self.edge_scharr_f)
         self.edge_prewitt.clicked.connect(self.edge_prewitt_f)
 
-        self.output_undo.clicked.connect(self.undo_output_image)
-        self.output_redo.clicked.connect(self.redo_output_image)
-        
-        # Connect menu items
-        self.source_folder_menu.triggered.connect(self.source_folder.click)
-        
-        self.output_save_menu.triggered.connect(self.output_save.click)
-        self.output_save_as_menu.triggered.connect(self.output_save_as.click)
-        self.output_export_menu.triggered.connect(self.output_export.click)
-        self.source_export_menu.triggered.connect(self.source_export.click)
-
-        self.exit_menu.triggered.connect(self.exit_app)
-        
+        ###################### Common Operations #####################
+        self.output_undo.clicked.connect(self.undo_output_image);self.output_undo_menu.triggered.connect(self.output_undo.click)
+        self.output_redo.clicked.connect(self.redo_output_image);self.output_redo_menu.triggered.connect(self.output_redo.click)
+        self.exit_menu.triggered.connect(self.exit_app)                
         self.source_clear_menu.triggered.connect(self.clear_source_image)
         self.output_clear_menu.triggered.connect(self.clear_output_image)
 
-        self.output_undo_menu.triggered.connect(self.output_undo.click)
-        self.output_redo_menu.triggered.connect(self.output_redo.click)
 
         self.admin_print_menu.triggered.connect(self.admin_print)
-
 
         # Button lists
         self.all_buttons = [
@@ -85,10 +74,11 @@ class PyqtUI(QMainWindow):
             ,self.exit_menu
         ]
 
-        # Tools buttons
-        self.tools_buttons = [
-           self.source_folder, self.output_save, self.bgr_2_gray, self.bgr_2_hsv
+        self.menu_buttons = [
+            self.source_folder_menu, self.source_export_menu, self.source_clear_menu, 
+            self.output_save_menu, self.output_save_as_menu, self.output_export_menu, self.output_clear_menu, self.output_undo_menu, self.output_redo_menu
         ]
+
 
         # Always display buttons
         self.always_display_buttons = [
@@ -106,8 +96,6 @@ class PyqtUI(QMainWindow):
 
         print("Output")
         print(self.image_operator.output_image_history)
-
-
 
 
 
