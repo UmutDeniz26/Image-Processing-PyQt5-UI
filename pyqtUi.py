@@ -19,18 +19,27 @@ class PyqtUI(QMainWindow):
         self.image_operator = Image_Operations.Image_Operations()
         
         # Connect the buttons
+    
+        # Source operations
         self.source_folder.clicked.connect(self.load_image_button)
         
+
+        # Output operations
         self.output_save.clicked.connect(self.save_output_image)
         self.output_save_as.clicked.connect(self.save_as_output_image)
         
+        # Image operations
+
+        # Conversion operations
         self.bgr_2_gray.clicked.connect(self.convert_to_gray)
         self.bgr_2_hsv.clicked.connect(self.convert_to_hsv)
         
+        # Segmentation operations
         self.segment_multi_otsu.clicked.connect(self.segment_multi_otsu_f)
         self.segment_chan_vese.clicked.connect(self.segment_chan_vese_f)
         self.segment_moprh_snakes.clicked.connect(self.segment_moprh_snakes_f)
 
+        # UX operations
         self.output_undo.clicked.connect(self.undo_output_image)
         self.output_redo.clicked.connect(self.redo_output_image)
         
