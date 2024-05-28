@@ -13,16 +13,16 @@ class Image:
         if image is not None:
             self.set_image( image )
 
-    def set_image(self, image:np.ndarray):
-        if type(image) == str:
+    def set_image(self, image: np.ndarray):
+        if isinstance(image, str):
             self.image = cv2.imread(image, cv2.IMREAD_COLOR)
-        elif type(image) == np.ndarray:
+        elif isinstance(image, np.ndarray):
             self.image = image
         else:
             raise ValueError('Invalid input, type: ', type(image))
             
     def get_nd_image(self) -> np.ndarray:
-        if type(self.image) != np.ndarray:
+        if not isinstance(self.image, np.ndarray):
             raise ValueError('Invalid image type')    
         return self.image
     
@@ -48,6 +48,21 @@ class Image:
 
         img = self.get_nd_image()
 
+        # Convert the image to 8-bit unsigned integer if it's not already
+        if img.dtype != np.uint8:
+            img = (img * 255).astype(np.uint8)
+
+        # Convert grayscale to RGB
+        if len(img.shape) == 2:  # Grayscale image
+            img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
+        else:  # Color image
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+        # Get the shape of the image
+        h, w, ch = img.shape
+
+        # Convert the image to QImage
+        bytes_per_line = ch * w
 
         # self.image_operator.get_output_image().get_nd_image() => array([ 92, 150], dtype=uint8)
         # Convert this to cv image
@@ -56,11 +71,11 @@ class Image:
 
         return QImage(
             img.data, 
-            img.shape[1],
-            img.shape[0],
-            img.strides[0],
-            QImage.Format_BGR888 if self.get_image_channels_type() == 'BGR' else QImage.Format_Grayscale8
-        )
+            w, 
+            h, 
+            bytes_per_line, 
+            QImage.Format_RGB888
+            )
     
     def save_image(self, path:str):
         """

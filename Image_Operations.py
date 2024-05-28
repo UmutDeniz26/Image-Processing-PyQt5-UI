@@ -86,20 +86,21 @@ class Image_Operations:
         
         # Check if the image is in grayscale. If not, convert it to grayscale
         if self.get_source_image().get_image_channels_type() == 'BGR':
-            self.set_source_image(self.convesion_actions(method='gray'))
+            img = self.convesion_actions(method='gray')
 
         # Detect edges using the specified method
         if method == 'roberts':
-            self.set_output_image(ski.filters.roberts(self.get_source_image().get_nd_image()))
+            ret = ski.filters.roberts(img)
         elif method == 'sobel':
-            self.set_output_image(ski.filters.sobel(self.get_source_image().get_nd_image()))
+            ret = ski.filters.sobel(img)
         elif method == 'scharr':
-            self.set_output_image(ski.filters.scharr(self.get_source_image().get_nd_image()))
+            ret = ski.filters.scharr(img)
         elif method == 'prewitt':
-            self.set_output_image(ski.filters.prewitt(self.get_source_image().get_nd_image()))
+            ret = ski.filters.prewitt(img)
         else:
             raise ValueError('Invalid method for edge detection')
     
+        return ret
     # Function to segment the image
     def segment_image(self, method:str='multi_otsu', num_classes:int=3) -> np.ndarray:
     
