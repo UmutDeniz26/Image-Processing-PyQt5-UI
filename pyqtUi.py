@@ -3,6 +3,7 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import Qt
+from PyQt5 import QtGui
 
 import sys
 import cv2
@@ -18,58 +19,40 @@ class PyqtUI(QMainWindow):
 
         self.image_operator = Image_Operations.Image_Operations()
         
+        ###################### Side Bar #############################
+
+        self.full_menu_widget.setVisible(False)
+        self.side_menu_buttons = [ self.source_side, self.output_side, self.conversion_side, self.segmentation_side, self.edge_detection_side ]
+        for button in self.side_menu_buttons:
+            button.clicked.connect(self.sidebar_button_clicked)
+        
+        self.init_buttons()
+        
+
+        ###################### MENU OPERATIONS ######################
+
         ###################### File Operations ######################
     
         # Source operations
-        self.source_folder.clicked.connect(self.load_image_button);self.source_folder_menu.triggered.connect(self.source_folder.click)
-        self.source_export.clicked.connect(self.export_source_image);self.source_export_menu.triggered.connect(self.source_export.click)
+        self.source_folder_menu.triggered.connect(self.load_image_button)
+        self.source_export_menu.triggered.connect(self.export_source_image)
 
         # Output operations
-        self.output_save.clicked.connect(self.save_output_image);self.output_save_menu.triggered.connect(self.output_save.click)
-        self.output_save_as.clicked.connect(self.save_as_output_image);self.output_save_as_menu.triggered.connect(self.output_save_as.click)
-        self.output_export.clicked.connect(self.export_output_image);self.output_export_menu.triggered.connect(self.output_export.click)
+        self.output_save_menu.triggered.connect(self.save_output_image)
+        self.output_save_as_menu.triggered.connect(self.save_as_output_image)
+        self.output_export_menu.triggered.connect(self.export_output_image)
         
         
-        ###################### Image Operations ######################
-
-        # Conversion operations
-        self.bgr_2_gray.clicked.connect(self.convert_to_gray)
-        self.bgr_2_hsv.clicked.connect(self.convert_to_hsv)
-        
-        # Segmentation operations
-        self.segment_multi_otsu.clicked.connect(self.segment_multi_otsu_f)
-        self.segment_chan_vese.clicked.connect(self.segment_chan_vese_f)
-        self.segment_moprh_snakes.clicked.connect(self.segment_moprh_snakes_f)
-
-        # Edge detection operations
-        self.edge_roberts.clicked.connect(self.edge_roberts_f)
-        self.edge_sobel.clicked.connect(self.edge_sobel_f)
-        self.edge_scharr.clicked.connect(self.edge_scharr_f)
-        self.edge_prewitt.clicked.connect(self.edge_prewitt_f)
-
         ###################### Common Operations #####################
-        self.output_undo.clicked.connect(self.undo_output_image);self.output_undo_menu.triggered.connect(self.output_undo.click)
-        self.output_redo.clicked.connect(self.redo_output_image);self.output_redo_menu.triggered.connect(self.output_redo.click)
-        self.exit_menu.triggered.connect(self.exit_app)                
-        self.source_clear_menu.triggered.connect(self.clear_source_image)
-        self.output_clear_menu.triggered.connect(self.clear_output_image)
-
-
-        self.admin_print_menu.triggered.connect(self.admin_print)
-
+        self.output_undo_menu.triggered.connect(self.undo_output_image)
+        self.output_redo_menu.triggered.connect(self.redo_output_image)
+                        
+        
         # Button lists
         self.all_buttons = [
-            self.source_folder, self.source_folder_menu, self.source_export_menu, self.source_clear_menu, self.source_export, self.source_undo
+            self.source_folder_menu, self.source_export_menu, self.source_clear_menu,
                     
-            
-            ,self.output_save, self.output_save_as,self.output_undo_menu,self.output_save_menu, self.output_save_as_menu, self.output_export_menu,self.output_clear_menu,self.output_redo_menu
-            ,self.output_export, self.output_undo, self.output_redo
-            
-            ,self.bgr_2_gray, self.bgr_2_hsv
-
-            ,self.segment_multi_otsu, self.segment_chan_vese, self.segment_moprh_snakes
-
-            ,self.edge_roberts, self.edge_sobel, self.edge_scharr, self.edge_prewitt
+            self.output_undo_menu,self.output_save_menu, self.output_save_as_menu, self.output_export_menu,self.output_clear_menu,self.output_redo_menu
 
             ,self.exit_menu
         ]
@@ -82,7 +65,7 @@ class PyqtUI(QMainWindow):
 
         # Always display buttons
         self.always_display_buttons = [
-            self.source_folder,self.source_folder_menu, self.exit_menu
+            self.source_folder_menu, self.exit_menu
         ]
 
         # Disable the buttons
@@ -99,9 +82,109 @@ class PyqtUI(QMainWindow):
 
 
 
+    ###################### Side Bar #############################
+    
+    def sidebar_button_clicked(self):
+        sender = self.sender()
 
+        if not hasattr(self, 'hold_sender') or self.hold_sender != sender or not self.full_menu_widget.isVisible():
+            self.full_menu_widget.setVisible(True)
+        else:
+            self.full_menu_widget.setVisible(False)
 
+        self.edit_full_menu_buttons(sender)    
+        
+        self.hold_sender = sender
 
+    def init_buttons(self):
+        button_names = [["Open", "Save", "Export", "Undo", "Redo", "Clear"],
+                        ["Save", "Save As", "Export", "Undo", "Redo", "Clear"],
+                        ['Gray', 'HSV'], 
+                        ['Multi Otsu', 'Chan Vese', 'Morph Snakes'],
+                        ['Roberts', 'Sobel', 'Scharr', 'Prewitt']]
+        
+        button_object_names = [["source_open", "source_save", "source_export", "source_undo", "source_redo", "source_clear"],
+                                 ["output_save", "output_save_as", "output_export", "output_undo", "output_redo", "output_clear"],
+                                 ['bgr_2_gray', 'bgr_2_hsv'], 
+                                 ['segment_multi_otsu', 'segment_chan_vese', 'segment_moprh_snakes'],
+                                 ['edge_roberts', 'edge_sobel', 'edge_scharr', 'edge_prewitt']]
+        
+        button_icons = [["src/icons/open.svg", "src/icons/save.svg", "src/icons/export.svg", "src/icons/undo.svg", "src/icons/redo.svg", "src/icons/clear.svg"],
+                        ["src/icons/save.svg", "src/icons/save_as.svg", "src/icons/export.svg", "src/icons/undo.svg", "src/icons/redo.svg", "src/icons/clear.svg"],
+                        ["src/icons/conversion.svg", "src/icons/conversion.svg"], 
+                        ["src/icons/segmentation.svg", "src/icons/segmentation.svg", "src/icons/segmentation.svg"],
+                        ["src/icons/edge_detection.svg", "src/icons/edge_detection.svg", "src/icons/edge_detection.svg", "src/icons/edge_detection.svg"]]
+        
+        button_functions = [[self.load_image_button, lambda:print(), self.export_source_image, lambda:print(), lambda:print(), self.clear_source_image],
+                            [self.save_output_image, self.save_as_output_image, self.export_output_image, self.undo_output_image, self.redo_output_image, self.clear_output_image],
+                            [self.convert_to_gray, self.convert_to_hsv], 
+                            [self.segment_multi_otsu_f, self.segment_chan_vese_f, self.segment_moprh_snakes_f],
+                            [self.edge_roberts_f, self.edge_sobel_f, self.edge_scharr_f, self.edge_prewitt_f]] 
+                             
+
+        
+        for i, (button_name, button_object_name, button_icon, button_functions) in enumerate(zip(button_names, button_object_names, button_icons, button_functions)):
+            for j, (name, object_name, icon, function) in enumerate(zip(button_name, button_object_name, button_icon,button_functions)):
+                button = QtWidgets.QPushButton(name)
+                button.setObjectName(object_name)
+                button.setIcon(QtGui.QIcon(icon))
+                button.clicked.connect(function)
+                self.toolbox_layout.addWidget(button)
+
+    def edit_full_menu_buttons(self, sender):
+        # Hide all the buttons not
+        for i in reversed(range(self.toolbox_layout.count())):
+            self.toolbox_layout.itemAt(i).widget().setVisible(False)
+        
+        if sender == self.source_side:
+            # Buttons to show
+            button_object_names = ["source_open", "source_save", "source_export", "source_undo", "source_redo", "source_clear"]
+            
+            # Show buttons to the container
+            for i,button_name in enumerate(button_object_names):
+                self.toolbox_layout.itemAt(
+                    self.toolbox_layout.indexOf(self.findChild(QtWidgets.QPushButton, button_name))
+                ).widget().setVisible(True)
+
+        elif sender == self.output_side:
+            # Buttons to show
+            button_object_names = ["output_save", "output_save_as", "output_export", "output_undo", "output_redo", "output_clear"]
+            
+            # Show buttons to the container
+            for i,button_name in enumerate(button_object_names):
+                self.toolbox_layout.itemAt(
+                    self.toolbox_layout.indexOf(self.findChild(QtWidgets.QPushButton, button_name))
+                ).widget().setVisible(True)
+
+        elif sender == self.conversion_side:
+            # Buttons to show
+            button_object_names = ["bgr_2_gray", "bgr_2_hsv"]
+            
+            # Show buttons to the container
+            for i,button_name in enumerate(button_object_names):
+                self.toolbox_layout.itemAt(
+                    self.toolbox_layout.indexOf(self.findChild(QtWidgets.QPushButton, button_name))
+                ).widget().setVisible(True)
+
+        elif sender == self.segmentation_side:
+            # Buttons to show
+            button_object_names = ["segment_multi_otsu", "segment_chan_vese", "segment_moprh_snakes"]
+            
+            # Show buttons to the container
+            for i,button_name in enumerate(button_object_names):
+                self.toolbox_layout.itemAt(
+                    self.toolbox_layout.indexOf(self.findChild(QtWidgets.QPushButton, button_name))
+                ).widget().setVisible(True)
+
+        elif sender == self.edge_detection_side:
+            # Buttons to show
+            button_object_names = ["edge_roberts", "edge_sobel", "edge_scharr", "edge_prewitt"]
+            
+            # Show buttons to the container
+            for i,button_name in enumerate(button_object_names):
+                self.toolbox_layout.itemAt(
+                    self.toolbox_layout.indexOf(self.findChild(QtWidgets.QPushButton, button_name))
+                ).widget().setVisible(True)
     #############################################################
 
     ###################### File Operations ######################

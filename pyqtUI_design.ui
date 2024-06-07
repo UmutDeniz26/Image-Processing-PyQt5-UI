@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1118</width>
-    <height>800</height>
+    <width>1680</width>
+    <height>880</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -44,204 +44,230 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <layout class="QFormLayout" name="formLayout_2">
-       <item row="0" column="0" colspan="2">
-        <widget class="QFrame" name="toolsFrame">
-         <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Operations Menu</string>
          </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
+         <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <widget class="QGroupBox" name="first_row">
-            <property name="title">
-             <string/>
+           <widget class="QFrame" name="frame">
+            <property name="maximumSize">
+             <size>
+              <width>500</width>
+              <height>16777215</height>
+             </size>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_9">
-             <item>
-              <widget class="QGroupBox" name="sourceBox">
-               <property name="title">
-                <string>Source</string>
-               </property>
-               <layout class="QHBoxLayout" name="horizontalLayout">
-                <item>
-                 <widget class="QPushButton" name="source_folder">
-                  <property name="text">
-                   <string>Open</string>
-                  </property>
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>src/tabler-icons/outline/file-import.svg</normaloff>src/tabler-icons/outline/file-import.svg</iconset>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="source_export">
-                  <property name="text">
-                   <string>Export</string>
-                  </property>
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>src/tabler-icons/outline/package-export.svg</normaloff>src/tabler-icons/outline/package-export.svg</iconset>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="source_undo">
-                  <property name="text">
-                   <string>Undo</string>
-                  </property>
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>src/tabler-icons/outline/arrow-back-up.svg</normaloff>src/tabler-icons/outline/arrow-back-up.svg</iconset>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QGroupBox" name="outputBox">
-               <property name="title">
-                <string>Output</string>
-               </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_2">
-                <item>
-                 <widget class="QPushButton" name="output_save">
-                  <property name="text">
-                   <string>Save </string>
-                  </property>
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>src/tabler-icons/outline/device-floppy.svg</normaloff>src/tabler-icons/outline/device-floppy.svg</iconset>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="output_save_as">
-                  <property name="text">
-                   <string>Save As</string>
-                  </property>
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>src/tabler-icons/outline/file-export.svg</normaloff>src/tabler-icons/outline/file-export.svg</iconset>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="output_export">
-                  <property name="text">
-                   <string>Export</string>
-                  </property>
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>src/tabler-icons/outline/package-export.svg</normaloff>src/tabler-icons/outline/package-export.svg</iconset>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="output_undo">
-                  <property name="text">
-                   <string>Undo</string>
-                  </property>
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>src/tabler-icons/outline/arrow-back-up.svg</normaloff>src/tabler-icons/outline/arrow-back-up.svg</iconset>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="output_redo">
-                  <property name="text">
-                   <string>Redo</string>
-                  </property>
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>src/tabler-icons/outline/arrow-forward-up.svg</normaloff>src/tabler-icons/outline/arrow-forward-up.svg</iconset>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QGroupBox" name="conversionBox">
-               <property name="title">
-                <string>Conversion</string>
-               </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_4">
-                <item>
-                 <widget class="QPushButton" name="bgr_2_gray">
-                  <property name="text">
-                   <string>Gray</string>
-                  </property>
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>src/tabler-icons/outline/palette.svg</normaloff>src/tabler-icons/outline/palette.svg</iconset>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="bgr_2_hsv">
-                  <property name="text">
-                   <string>HSV</string>
-                  </property>
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>src/tabler-icons/outline/palette.svg</normaloff>src/tabler-icons/outline/palette.svg</iconset>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QGroupBox" name="second_row">
-            <property name="title">
-             <string/>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
-              <widget class="QGroupBox" name="groupBox">
-               <property name="title">
-                <string>Segmentation</string>
+              <widget class="QWidget" name="icon_only_widget" native="true">
+               <property name="maximumSize">
+                <size>
+                 <width>200</width>
+                 <height>16777215</height>
+                </size>
                </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_8">
+               <layout class="QVBoxLayout" name="verticalLayout_5">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
                 <item>
-                 <widget class="QPushButton" name="segment_multi_otsu">
-                  <property name="text">
-                   <string>Multi Otsu</string>
-                  </property>
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>src/tabler-icons/outline/layers-selected.svg</normaloff>src/tabler-icons/outline/layers-selected.svg</iconset>
-                  </property>
-                 </widget>
+                 <layout class="QHBoxLayout" name="horizontalLayout_14">
+                  <item>
+                   <widget class="QLabel" name="logo_label_2">
+                    <property name="minimumSize">
+                     <size>
+                      <width>50</width>
+                      <height>50</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>50</width>
+                      <height>50</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                    <property name="pixmap">
+                     <pixmap>../final_project/src_side/icon/Logo.png</pixmap>
+                    </property>
+                    <property name="scaledContents">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="segment_chan_vese">
-                  <property name="text">
-                   <string>Chan Vese</string>
+                 <layout class="QVBoxLayout" name="verticalLayout_6">
+                  <property name="spacing">
+                   <number>0</number>
                   </property>
-                  <property name="icon">
-                   <iconset>
-                    <normaloff>src/tabler-icons/outline/layers-selected.svg</normaloff>src/tabler-icons/outline/layers-selected.svg</iconset>
-                  </property>
-                 </widget>
+                  <item>
+                   <widget class="QPushButton" name="source_side">
+                    <property name="text">
+                     <string>Source</string>
+                    </property>
+                    <property name="icon">
+                     <iconset>
+                      <normaloff>../final_project/src/icons/UI Basic GLYPH-02.svg</normaloff>../final_project/src/icons/UI Basic GLYPH-02.svg</iconset>
+                    </property>
+                    <property name="iconSize">
+                     <size>
+                      <width>20</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="checkable">
+                     <bool>true</bool>
+                    </property>
+                    <property name="autoExclusive">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="output_side">
+                    <property name="text">
+                     <string>Output</string>
+                    </property>
+                    <property name="icon">
+                     <iconset>
+                      <normaloff>../final_project/src/icons/UI Basic GLYPH-20.svg</normaloff>../final_project/src/icons/UI Basic GLYPH-20.svg</iconset>
+                    </property>
+                    <property name="iconSize">
+                     <size>
+                      <width>20</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="checkable">
+                     <bool>true</bool>
+                    </property>
+                    <property name="autoExclusive">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="conversion_side">
+                    <property name="text">
+                     <string>Conversion</string>
+                    </property>
+                    <property name="icon">
+                     <iconset>
+                      <normaloff>../final_project/src/icons/UI Basic GLYPH-113.svg</normaloff>../final_project/src/icons/UI Basic GLYPH-113.svg</iconset>
+                    </property>
+                    <property name="iconSize">
+                     <size>
+                      <width>20</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="checkable">
+                     <bool>true</bool>
+                    </property>
+                    <property name="autoExclusive">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="segmentation_side">
+                    <property name="text">
+                     <string>Segmentation</string>
+                    </property>
+                    <property name="icon">
+                     <iconset>
+                      <normaloff>../final_project/src/icons/UI Basic GLYPH-100.svg</normaloff>../final_project/src/icons/UI Basic GLYPH-100.svg</iconset>
+                    </property>
+                    <property name="iconSize">
+                     <size>
+                      <width>20</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="checkable">
+                     <bool>true</bool>
+                    </property>
+                    <property name="autoExclusive">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="edge_detection_side">
+                    <property name="text">
+                     <string>Edge Detection</string>
+                    </property>
+                    <property name="icon">
+                     <iconset>
+                      <normaloff>../final_project/src/icons/UI Basic GLYPH-55.svg</normaloff>../final_project/src/icons/UI Basic GLYPH-55.svg</iconset>
+                    </property>
+                    <property name="iconSize">
+                     <size>
+                      <width>20</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                    <property name="checkable">
+                     <bool>true</bool>
+                    </property>
+                    <property name="autoExclusive">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="segment_moprh_snakes">
+                 <spacer name="verticalSpacer_3">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>100</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="exit_button_2">
                   <property name="text">
-                   <string>Morphological Snakes</string>
+                   <string>Exit</string>
                   </property>
                   <property name="icon">
                    <iconset>
-                    <normaloff>src/tabler-icons/outline/layers-selected.svg</normaloff>src/tabler-icons/outline/layers-selected.svg</iconset>
+                    <normaloff>../final_project/src/icons/UI Basic GLYPH-46.svg</normaloff>../final_project/src/icons/UI Basic GLYPH-46.svg</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>20</width>
+                    <height>20</height>
+                   </size>
                   </property>
                  </widget>
                 </item>
@@ -249,37 +275,68 @@
               </widget>
              </item>
              <item>
-              <widget class="QGroupBox" name="groupBox_2">
-               <property name="title">
-                <string>Edge Detection</string>
+              <widget class="QWidget" name="widget" native="true">
+               <property name="minimumSize">
+                <size>
+                 <width>200</width>
+                 <height>0</height>
+                </size>
                </property>
                <layout class="QHBoxLayout" name="horizontalLayout_3">
                 <item>
-                 <widget class="QPushButton" name="edge_roberts">
-                  <property name="text">
-                   <string>Roberts</string>
+                 <widget class="QWidget" name="full_menu_widget" native="true">
+                  <property name="minimumSize">
+                   <size>
+                    <width>200</width>
+                    <height>220</height>
+                   </size>
                   </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="edge_sobel">
-                  <property name="text">
-                   <string>Sobel</string>
+                  <property name="maximumSize">
+                   <size>
+                    <width>100</width>
+                    <height>16777215</height>
+                   </size>
                   </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="edge_scharr">
-                  <property name="text">
-                   <string>Scharr</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="edge_prewitt">
-                  <property name="text">
-                   <string>Prewitt</string>
-                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_4">
+                   <item>
+                    <widget class="QLabel" name="logo_label_3">
+                     <property name="font">
+                      <font>
+                       <pointsize>15</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string/>
+                     </property>
+                     <property name="pixmap">
+                      <pixmap>src/tabler-icons/outline/tools.svg</pixmap>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QVBoxLayout" name="toolbox_layout">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                    </layout>
+                   </item>
+                   <item>
+                    <spacer name="verticalSpacer_2">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>100</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
                  </widget>
                 </item>
                </layout>
@@ -291,7 +348,7 @@
          </layout>
         </widget>
        </item>
-       <item row="1" column="0" colspan="2">
+       <item>
         <widget class="QFrame" name="images_frame">
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
@@ -360,8 +417,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1118</width>
-     <height>21</height>
+     <width>1680</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
