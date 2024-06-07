@@ -46,13 +46,13 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="operations_menu">
          <property name="title">
           <string>Operations Menu</string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <widget class="QFrame" name="frame">
+           <widget class="QFrame" name="operations_frame">
             <property name="maximumSize">
              <size>
               <width>500</width>
@@ -68,6 +68,12 @@
             <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
               <widget class="QWidget" name="icon_only_widget" native="true">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>230</height>
+                </size>
+               </property>
                <property name="maximumSize">
                 <size>
                  <width>200</width>
@@ -255,7 +261,7 @@
                  </spacer>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="exit_button_2">
+                 <widget class="QPushButton" name="exit_button">
                   <property name="text">
                    <string>Exit</string>
                   </property>
@@ -288,7 +294,7 @@
                   <property name="minimumSize">
                    <size>
                     <width>200</width>
-                    <height>220</height>
+                    <height>0</height>
                    </size>
                   </property>
                   <property name="maximumSize">
@@ -373,7 +379,7 @@
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_6">
              <item>
-              <widget class="QLabel" name="source_image">
+              <widget class="QLabel" name="source_image_frame">
                <property name="text">
                 <string/>
                </property>
@@ -395,7 +401,7 @@
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_7">
              <item>
-              <widget class="QLabel" name="output_image">
+              <widget class="QLabel" name="output_image_frame">
                <property name="text">
                 <string/>
                </property>
@@ -412,6 +418,7 @@
     </item>
    </layout>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -468,20 +475,12 @@
      <string>Edge Detection</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuadmin">
-    <property name="title">
-     <string>Admin</string>
-    </property>
-    <addaction name="admin_print_menu"/>
-   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuConversion"/>
    <addaction name="menuSegmentation"/>
    <addaction name="menuEdge_Detection"/>
-   <addaction name="menuadmin"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="source_folder_menu">
    <property name="text">
     <string>Open Source</string>

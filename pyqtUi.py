@@ -9,16 +9,14 @@ import sys
 import cv2
 import numpy as np
 import os
-import Image_Operations
+from Image_Operations import Image_Operations
 
-class PyqtUI(QMainWindow):
+class PyqtUI(QMainWindow, Image_Operations):
     def __init__(self):
         super().__init__()
         uic.loadUi('pyqtUI_design.ui', self)
         self.show()
 
-        self.image_operator = Image_Operations.Image_Operations()
-        
         ###################### Side Bar #############################
 
         self.full_menu_widget.setVisible(False)
@@ -46,12 +44,13 @@ class PyqtUI(QMainWindow):
         ###################### Common Operations #####################
         self.output_undo_menu.triggered.connect(self.undo_output_image)
         self.output_redo_menu.triggered.connect(self.redo_output_image)
+        self.exit_button.clicked.connect(self.exit_app)
                         
         
         # Button lists
         self.all_buttons = [
             self.source_folder_menu, self.source_export_menu, self.source_clear_menu,
-                    
+
             self.output_undo_menu,self.output_save_menu, self.output_save_as_menu, self.output_export_menu,self.output_clear_menu,self.output_redo_menu
 
             ,self.exit_menu
@@ -65,21 +64,11 @@ class PyqtUI(QMainWindow):
 
         # Always display buttons
         self.always_display_buttons = [
-            self.source_folder_menu, self.exit_menu
+            self.source_folder_menu, self.exit_menu, self.exit_button
         ]
 
         # Disable the buttons
         self.change_button_state(self.all_buttons, False)
-
-
-
-    def admin_print(self):
-        print("Histories. \nSource")
-        print(self.image_operator.source_image_history)
-
-        print("Output")
-        print(self.image_operator.output_image_history)
-
 
 
     ###################### Side Bar #############################
@@ -97,29 +86,29 @@ class PyqtUI(QMainWindow):
         self.hold_sender = sender
 
     def init_buttons(self):
-        button_names = [["Open", "Save", "Export", "Undo", "Redo", "Clear"],
+        button_names = [["Open", "Export", "Clear"],
                         ["Save", "Save As", "Export", "Undo", "Redo", "Clear"],
                         ['Gray', 'HSV'], 
                         ['Multi Otsu', 'Chan Vese', 'Morph Snakes'],
                         ['Roberts', 'Sobel', 'Scharr', 'Prewitt']]
         
-        button_object_names = [["source_open", "source_save", "source_export", "source_undo", "source_redo", "source_clear"],
+        button_object_names = [["source_open", "source_export", "source_clear"],
                                  ["output_save", "output_save_as", "output_export", "output_undo", "output_redo", "output_clear"],
                                  ['bgr_2_gray', 'bgr_2_hsv'], 
                                  ['segment_multi_otsu', 'segment_chan_vese', 'segment_moprh_snakes'],
                                  ['edge_roberts', 'edge_sobel', 'edge_scharr', 'edge_prewitt']]
         
-        button_icons = [["src/icons/open.svg", "src/icons/save.svg", "src/icons/export.svg", "src/icons/undo.svg", "src/icons/redo.svg", "src/icons/clear.svg"],
+        button_icons = [["src/icons/open.svg", "src/icons/export.svg", "src/icons/clear.svg"],
                         ["src/icons/save.svg", "src/icons/save_as.svg", "src/icons/export.svg", "src/icons/undo.svg", "src/icons/redo.svg", "src/icons/clear.svg"],
                         ["src/icons/conversion.svg", "src/icons/conversion.svg"], 
                         ["src/icons/segmentation.svg", "src/icons/segmentation.svg", "src/icons/segmentation.svg"],
                         ["src/icons/edge_detection.svg", "src/icons/edge_detection.svg", "src/icons/edge_detection.svg", "src/icons/edge_detection.svg"]]
         
-        button_functions = [[self.load_image_button, lambda:print(), self.export_source_image, lambda:print(), lambda:print(), self.clear_source_image],
-                            [self.save_output_image, self.save_as_output_image, self.export_output_image, self.undo_output_image, self.redo_output_image, self.clear_output_image],
-                            [self.convert_to_gray, self.convert_to_hsv], 
-                            [self.segment_multi_otsu_f, self.segment_chan_vese_f, self.segment_moprh_snakes_f],
-                            [self.edge_roberts_f, self.edge_sobel_f, self.edge_scharr_f, self.edge_prewitt_f]] 
+        button_functions = [[self.load_image_button, self.export_source_image, self.image_edit_operations],
+                            [self.save_output_image, self.save_as_output_image, self.export_output_image, self.image_edit_operations, self.image_edit_operations, self.image_edit_operations],
+                            [self.conversion_handler, self.conversion_handler],
+                            [self.segmentation_handler, self.segmentation_handler, self.segmentation_handler],
+                            [self.edge_detection_handler, self.edge_detection_handler, self.edge_detection_handler, self.edge_detection_handler]] 
                              
 
         
@@ -138,7 +127,7 @@ class PyqtUI(QMainWindow):
         
         if sender == self.source_side:
             # Buttons to show
-            button_object_names = ["source_open", "source_save", "source_export", "source_undo", "source_redo", "source_clear"]
+            button_object_names = ["source_open", "source_export", "source_clear"]
             
             # Show buttons to the container
             for i,button_name in enumerate(button_object_names):
@@ -197,8 +186,8 @@ class PyqtUI(QMainWindow):
         # If the image path is not empty, set the source image
         if image_path:
             # Name of the label of the source image is sourceImage
-            self.image_operator.set_source_image(image_path)            
-            self.update_source_image(label_size=(self.source_image.width(), self.source_image.height()))
+            self.set_source_image(image_path)            
+            self.update_source_image()
 
             # Assign the source image path
             self.source_image_path = image_path
@@ -209,7 +198,7 @@ class PyqtUI(QMainWindow):
     def save_output_image(self):
         # If the folder path is not empty, save the output image
         if self.source_image_path:
-            self.image_operator.get_output_image().save_image(self.source_image_path)
+            self.get_output_image().save_image(self.source_image_path)
 
     def save_as_output_image(self):
 
@@ -223,7 +212,7 @@ class PyqtUI(QMainWindow):
 
             # If the folder path is not empty, save the output image, check extension is jpg
             if image_save_path.endswith('.jpg'):
-                self.image_operator.get_output_image().save_image(image_save_path)
+                self.get_output_image().save_image(image_save_path)
                 break
             else:
                 print("Please select a valid path with .jpg extension")
@@ -239,7 +228,7 @@ class PyqtUI(QMainWindow):
 
             # If the folder path is not empty, save the output image, check extension is jpg or png or bmp
             if (image_save_path.endswith('.jpg') or image_save_path.endswith('.png') or image_save_path.endswith('.bmp')):
-                self.image_operator.get_output_image().save_image(image_save_path)
+                self.get_output_image().save_image(image_save_path)
                 break
             else:
                 print("Please select a valid path with .jpg or .png or .bmp extension : ", image_save_path)
@@ -258,7 +247,7 @@ class PyqtUI(QMainWindow):
 
             # If the folder path is not empty, save the output image, check extension is jpg or png or bmp
             if (image_save_path.endswith('.jpg') or image_save_path.endswith('.png') or image_save_path.endswith('.bmp')):
-                self.image_operator.get_source_image().save_image(image_save_path)
+                self.get_source_image().save_image(image_save_path)
                 break
             else:
                 print("Please select a valid path with .jpg or .png or .bmp extension : ", image_save_path)
@@ -281,100 +270,60 @@ class PyqtUI(QMainWindow):
 
 
     # Display functions
-    def update_source_image(self, label_size=(400, 400)):
-        self.source_image.setPixmap(
+    def update_source_image(self):
+        label_size = (self.source_image_frame.width(), self.source_image_frame.height())
+
+        self.source_image_frame.setPixmap(
             QPixmap.fromImage(
-                self.image_operator.get_source_image().get_QImage()
+                self.get_source_image().get_QImage()
             ).scaled(label_size[0], label_size[1])
         )
-        self.source_image.setAlignment(Qt.AlignCenter)
+        self.source_image_frame.setAlignment(Qt.AlignCenter)
     
-    def update_output_image(self, label_size=(400, 400)):
+    def update_output_image(self,):
+        label_size = (self.output_image_frame.width(), self.output_image_frame.height())
         try:
-            self.output_image.setPixmap(
+            self.output_image_frame.setPixmap(
                 QPixmap.fromImage(
-                    self.image_operator.get_output_image().get_QImage()
+                    self.get_output_image().get_QImage()
                 ).scaled(label_size[0], label_size[1])
             )
-            self.output_image.setAlignment(Qt.AlignCenter)
+            self.output_image_frame.setAlignment(Qt.AlignCenter)
         except:
-            if len (self.image_operator.get_output_image().get_nd_image().shape) < 2:
+            if len (self.get_output_image().get_nd_image().shape) < 2:
                 # it means img is numpy array that comes from segmentation
-                self.output_image.setPixmap(
+                self.output_image_frame.setPixmap(
                     QPixmap.fromImage(
-                        self.image_operator.get_output_image().get_nd_image()
+                        self.get_output_image().get_nd_image()
                     ).scaled(label_size[0], label_size[1])
                 )
-                self.output_image.setAlignment(Qt.AlignCenter)
+                self.output_image_frame.setAlignment(Qt.AlignCenter)
             else:
-                print("Error in update_output_image, image shape: ", self.image_operator.get_output_image().get_nd_image().shape)
+                print("Error in update_output_image, image shape: ", self.get_output_image().get_nd_image().shape)
             
 
+
     # Conversion functions
-    def convert_to_gray(self):
-        img = self.image_operator.convesion_actions(method='gray')
-        self.image_operator.set_output_image(img)
-        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
-
-    def convert_to_hsv(self):
-        img = self.image_operator.convesion_actions(method='hsv')
-        self.image_operator.set_output_image(img)
-        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
-
-
-    # Clear functions
-    def clear_source_image(self):
-        
-        self.image_operator.set_source_image(None);self.source_image_path = None
-        self.image_operator.source_image_history = {"image_history":[], "current_index":-1}
-
-        self.change_button_state(self.all_buttons, False)
-        self.source_image.clear()
-
-    def clear_output_image(self):
-        self.image_operator.output_image_history = {"image_history":[], "current_index":-1}
-        self.output_image.clear()
-
+    def conversion_handler(self):
+        sender = self.sender()
+        img = self.conversion_actions(method=sender.objectName())
+        self.set_output_image(img)
+        self.update_output_image()
 
     # Segmentation functions
-    def segment_multi_otsu_f(self):
-        img = self.image_operator.segment_image(method='multi_otsu')
-        self.image_operator.set_output_image(img)
-        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
-
-    def segment_chan_vese_f(self):
-        img = self.image_operator.segment_image(method='chan_vese')
-        self.image_operator.set_output_image(img)
-        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
-
-    def segment_moprh_snakes_f(self):
-        img = self.image_operator.segment_image(method='morph_snakes')
-        self.image_operator.set_output_image(img)
-        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
+    def segmentation_handler(self):
+        sender = self.sender()
+        img = self.segment_image(method=sender.objectName())
+        self.set_output_image(img)
+        self.update_output_image()
 
 
     # Edge detection functions
-    def edge_roberts_f(self):
-        img = self.image_operator.edge_detection_actions(method='roberts')
-        self.image_operator.set_output_image(img)
-        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
-
-    def edge_sobel_f(self):
-        img = self.image_operator.edge_detection_actions(method='sobel')
-        self.image_operator.set_output_image(img)
-        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
-
-    def edge_scharr_f(self):
-        img = self.image_operator.edge_detection_actions(method='scharr')
-        self.image_operator.set_output_image(img)
-        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
-
-    def edge_prewitt_f(self):
-        img = self.image_operator.edge_detection_actions(method='prewitt')
-        self.image_operator.set_output_image(img)
-        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
-
-
+    def edge_detection_handler(self):
+        sender = self.sender()
+        img = self.edge_detection_actions(method=sender.objectName())
+        self.set_output_image(img)
+        self.update_output_image()
 
 
 
@@ -391,13 +340,28 @@ class PyqtUI(QMainWindow):
             if button not in self.always_display_buttons:
                 button.setDisabled(False) if state else button.setDisabled(True)
 
-    def undo_output_image(self):
-        self.image_operator.undo_output_image()
-        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
+    def image_edit_operations(self):
+        # Get the sender
+        sender = self.sender()
 
-    def redo_output_image(self):
-        self.image_operator.redo_output_image()
-        self.update_output_image(label_size=(self.output_image.width(), self.output_image.height()))
+        # Undo - Redo operations
+        if sender.objectName() == "output_undo":
+            self.undo_output_image()
+            self.update_output_image()
+
+        elif sender.objectName() == "output_redo":
+            self.redo_output_image()
+            self.update_output_image()
+        
+        elif sender.objectName() == "source_clear":
+            self.set_source_image(None);self.source_image_path = None
+
+            self.change_button_state(self.all_buttons, False)
+            self.source_image_frame.clear()
+
+        elif sender.objectName() == "output_clear":
+            self.output_image_history = {"image_history":[], "current_index":0}
+            self.output_image_frame.clear()
 
 
 if __name__ == '__main__':

@@ -83,7 +83,14 @@ class Image:
         :param path: str
         :return: None
         """
-        cv2.imwrite(path, self.get_nd_image())
+
+        nd_img = self.get_nd_image()
+
+        # Convert the image to 8-bit unsigned integer if it's not already
+        if nd_img.dtype != np.uint8 or nd_img.max() < 2:
+            nd_img = (nd_img * 255).astype(np.uint8)
+
+        cv2.imwrite(path, nd_img)
     
 if __name__ == '__main__':
     image = Image('src/images/lena.png')

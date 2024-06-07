@@ -15,63 +15,68 @@ class Image_Operations:
             self.set_source_image( image )
 
         # Initialize the image history for redo and undo operations
-        self.source_image_history = {"image_history":[], "current_index":-1}
-        self.output_image_history = {"image_history":[], "current_index":-1}
+        self.output_image_history = {"image_history":[], "current_index":0}
     
     # Set the source image
     def set_source_image(self, image:np.ndarray):
         self.source_image = Image(image)
-        self.source_image_history["image_history"].append(self.source_image)
 
     # Set the output image
     def set_output_image(self, output:np.ndarray):
+        
         if type(output) != Image:
             self.__output_image = Image(output)
 
-        self.output_image_history["current_index"] += 1
-        self.output_image_history["image_history"].append(self.__output_image)
+        if self.output_image_history["current_index"] == 0:
+            self.output_image_history["image_history"].insert(0, self.__output_image)
+        else:
+            self.output_image_history["image_history"] = self.output_image_history["image_history"][self.output_image_history["current_index"]:]
+            self.output_image_history["image_history"].insert(0, self.__output_image)
+            self.output_image_history["current_index"] = 0
     
     # Get the source image
     def get_source_image(self) -> np.ndarray:    
-        index = self.source_image_history["current_index"]
-        return self.source_image_history["image_history"][index]
+        return self.source_image
     
     # Get the output image
     def get_output_image(self) -> np.ndarray:
         index = self.output_image_history["current_index"]
         return self.output_image_history["image_history"][index] 
     
+
+
+
+    ########################################### Undo - Redo Functions ####################################################
+
     def undo_output_image(self):
-        self.output_image_history["current_index"] -= 1 if self.output_image_history["current_index"] > 0 else 0
-
+        if self.output_image_history["current_index"] < len(self.output_image_history["image_history"]) - 1 :
+            self.output_image_history["current_index"] = (self.output_image_history["current_index"] + 1) 
+                                                      
         # I didn't use set function because I don't want to update the history list
         self.__output_image = self.output_image_history["image_history"][self.output_image_history["current_index"]]
-
+        
     def redo_output_image(self):
-        self.output_image_history["current_index"] +=\
-            1 if self.output_image_history["current_index"] < len(self.output_image_history["image_history"]) - 1 else 0
-
+        if self.output_image_history["current_index"] > 0:
+            self.output_image_history["current_index"] = (self.output_image_history["current_index"] - 1)
+        
         # I didn't use set function because I don't want to update the history list
         self.__output_image = self.output_image_history["image_history"][self.output_image_history["current_index"]]
 
-    def undo_source_image(self):
-        self.source_image_history["current_index"] -= 1
+    #################################################################################################################
 
-        # I didn't use set function because I don't want to update the history list 
-        self.source_image = self.source_image_history["image_history"][self.source_image_history["current_index"]]
 
     # Function to convert the image to a specified color space
-    def convesion_actions(self, method:str='gray') -> np.ndarray:
+    def conversion_actions(self, method:str='gray') -> np.ndarray:
         src_type = self.get_source_image().get_image_channels_type()
 
-        if method == 'gray':
+        if method == 'bgr_2_gray':
             if src_type == 'BGR':
                 cvt_type = cv2.COLOR_BGR2GRAY
             elif src_type == 'GRAY':
                 return
             else:
                 raise ValueError('Invalid image type') 
-        elif method == 'hsv':
+        elif method == 'bgr_2_hsv':
             if src_type == 'BGR':
                 cvt_type = cv2.COLOR_BGR2HSV
             elif src_type == 'GRAY':
@@ -81,21 +86,22 @@ class Image_Operations:
         
         return cv2.cvtColor(self.get_source_image().get_nd_image(), cvt_type)
 
+    
     # Function to detect edges in the image
     def edge_detection_actions(self, method:str='roberts', threshold1:int=100, threshold2:int=200 ) -> np.ndarray:
         
         # Check if the image is in grayscale. If not, convert it to grayscale
         if self.get_source_image().get_image_channels_type() == 'BGR':
-            img = self.convesion_actions(method='gray')
+            img = self.conversion_actions(method='bgr_2_gray')
 
         # Detect edges using the specified method
-        if method == 'roberts':
+        if method == 'edge_roberts':
             ret = ski.filters.roberts(img)
-        elif method == 'sobel':
+        elif method == 'edge_sobel':
             ret = ski.filters.sobel(img)
-        elif method == 'scharr':
+        elif method == 'edge_scharr':
             ret = ski.filters.scharr(img)
-        elif method == 'prewitt':
+        elif method == 'edge_prewitt':
             ret = ski.filters.prewitt(img)
         else:
             raise ValueError('Invalid method for edge detection')
@@ -106,14 +112,14 @@ class Image_Operations:
     
         # Check if the image is in grayscale. If not, convert it to grayscale
         if self.get_source_image().get_image_channels_type() == 'BGR':
-            img = self.convesion_actions(method='gray')
+            img = self.conversion_actions(method='bgr_2_gray')
 
         # Detect segments using the specified method
-        if method == 'multi_otsu':
+        if method == 'segment_multi_otsu':
             ret = ski.filters.threshold_multiotsu(img, num_classes)
-        elif method == 'chan_vese':
+        elif method == 'segment_chan_vese':
             ret = ski.segmentation.chan_vese(img, num_classes)
-        elif method == 'morph_snakes':
+        elif method == 'segment_moprh_snakes':
             ret = ski.segmentation.morphological_chan_vese(img, num_classes)
         else:
             raise ValueError('Invalid method for segmentation, method: ', method)
