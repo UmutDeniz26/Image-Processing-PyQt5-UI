@@ -137,7 +137,7 @@
                     </property>
                     <property name="icon">
                      <iconset>
-                      <normaloff>../final_project/src/icons/UI Basic GLYPH-02.svg</normaloff>../final_project/src/icons/UI Basic GLYPH-02.svg</iconset>
+                      <normaloff>src/icons/source.svg</normaloff>src/icons/source.svg</iconset>
                     </property>
                     <property name="iconSize">
                      <size>
@@ -160,7 +160,7 @@
                     </property>
                     <property name="icon">
                      <iconset>
-                      <normaloff>../final_project/src/icons/UI Basic GLYPH-20.svg</normaloff>../final_project/src/icons/UI Basic GLYPH-20.svg</iconset>
+                      <normaloff>src/icons/output.svg</normaloff>src/icons/output.svg</iconset>
                     </property>
                     <property name="iconSize">
                      <size>
@@ -183,7 +183,7 @@
                     </property>
                     <property name="icon">
                      <iconset>
-                      <normaloff>../final_project/src/icons/UI Basic GLYPH-113.svg</normaloff>../final_project/src/icons/UI Basic GLYPH-113.svg</iconset>
+                      <normaloff>src/icons/conversion.svg</normaloff>src/icons/conversion.svg</iconset>
                     </property>
                     <property name="iconSize">
                      <size>
@@ -206,7 +206,7 @@
                     </property>
                     <property name="icon">
                      <iconset>
-                      <normaloff>../final_project/src/icons/UI Basic GLYPH-100.svg</normaloff>../final_project/src/icons/UI Basic GLYPH-100.svg</iconset>
+                      <normaloff>src/icons/segmentation.svg</normaloff>src/icons/segmentation.svg</iconset>
                     </property>
                     <property name="iconSize">
                      <size>
@@ -229,7 +229,7 @@
                     </property>
                     <property name="icon">
                      <iconset>
-                      <normaloff>../final_project/src/icons/UI Basic GLYPH-55.svg</normaloff>../final_project/src/icons/UI Basic GLYPH-55.svg</iconset>
+                      <normaloff>src/icons/edge_detection.svg</normaloff>src/icons/edge_detection.svg</iconset>
                     </property>
                     <property name="iconSize">
                      <size>
@@ -315,7 +315,7 @@
                       <string/>
                      </property>
                      <property name="pixmap">
-                      <pixmap>src/tabler-icons/outline/tools.svg</pixmap>
+                      <pixmap>src/icons/tools.svg</pixmap>
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignCenter</set>
