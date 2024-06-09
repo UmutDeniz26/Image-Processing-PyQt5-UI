@@ -127,47 +127,44 @@ class UI_Interface(QMainWindow, Image_Operations):
         """
         @brief Initializes the buttons in the sidebar and connects them to their respective functions.
         """
-        button_names = [["Open", "Export", "Clear"],
-                        ["Save", "Save As", "Export", "Undo", "Redo", "Clear"],
-                        ['Gray', 'HSV'], 
-                        ['Multi Otsu', 'Chan Vese', 'Morph Snakes'],
-                        ['Roberts', 'Sobel', 'Scharr', 'Prewitt']]
-        
-        button_object_names = [["source_open", "source_export", "source_clear"],
-                                 ["output_save", "output_save_as", "output_export", "output_undo", "output_redo", "output_clear"],
-                                 ['bgr_2_gray', 'bgr_2_hsv'], 
-                                 ['segment_multi_otsu', 'segment_chan_vese', 'segment_moprh_snakes'],
-                                 ['edge_roberts', 'edge_sobel', 'edge_scharr', 'edge_prewitt']]
-        
-        button_icons = [["src/icons/open.svg", "src/icons/export.svg", "src/icons/clear.svg"],
-                        ["src/icons/save.svg", "src/icons/save_as.svg", "src/icons/export.svg", "src/icons/undo.svg", "src/icons/redo.svg", "src/icons/clear.svg"],
-                        ["src/icons/conversion.svg", "src/icons/conversion.svg"], 
-                        ["src/icons/segmentation.svg", "src/icons/segmentation.svg", "src/icons/segmentation.svg"],
-                        ["src/icons/edge_detection.svg", "src/icons/edge_detection.svg", "src/icons/edge_detection.svg", "src/icons/edge_detection.svg"]]
-        
-        button_functions = [[self.load_image_button, self.export_source_image, self.image_edit_operations],
-                            [self.save_output_image, self.save_as_output_image, self.export_output_image, self.image_edit_operations, self.image_edit_operations, self.image_edit_operations],
-                            [self.conversion_handler, self.conversion_handler],
-                            [self.segmentation_handler, self.segmentation_handler, self.segmentation_handler],
-                            [self.edge_detection_handler, self.edge_detection_handler, self.edge_detection_handler, self.edge_detection_handler]] 
 
-        for i, (button_name, button_object_name, button_icon, button_functions) in enumerate(zip(button_names, button_object_names, button_icons, button_functions)):
-            for j, (name, object_name, icon, function) in enumerate(zip(button_name, button_object_name, button_icon, button_functions)):
-                
-                button = QtWidgets.QPushButton(name)
-                
-                button.setObjectName(object_name)
-                
-                button.setIcon(QtGui.QIcon(icon))
+        buttons = [
+            {"name": "Open", "object_name": "source_open", "icon": "src/icons/open.svg", "function": self.load_image_button},
+            {"name": "Export", "object_name": "source_export", "icon": "src/icons/export.svg", "function": self.export_source_image},
+            {"name": "Clear", "object_name": "source_clear", "icon": "src/icons/clear.svg", "function": self.image_edit_operations},
 
-                button.clicked.connect(function)
-                
-                self.toolbox_layout.addWidget(button)
+            {"name": "Save", "object_name": "output_save", "icon": "src/icons/save.svg", "function": self.save_output_image},
+            {"name": "Save As", "object_name": "output_save_as", "icon": "src/icons/save_as.svg", "function": self.save_as_output_image},
+            {"name": "Export", "object_name": "output_export", "icon": "src/icons/export.svg", "function": self.export_output_image},
+            {"name": "Undo", "object_name": "output_undo", "icon": "src/icons/undo.svg", "function": self.image_edit_operations},
+            {"name": "Redo", "object_name": "output_redo", "icon": "src/icons/redo.svg", "function": self.image_edit_operations},
+            {"name": "Clear", "object_name": "output_clear", "icon": "src/icons/clear.svg", "function": self.image_edit_operations},
 
-                # Connect Menu buttons
-                menu_button = self.findChild(QtWidgets.QAction, object_name + "_menu")
-                if menu_button:
-                    menu_button.triggered.connect(function)
+            {"name": "Gray", "object_name": "bgr_2_gray", "icon": "src/icons/conversion.svg", "function": self.conversion_handler},
+            {"name": "HSV", "object_name": "bgr_2_hsv", "icon": "src/icons/conversion.svg", "function": self.conversion_handler},
+
+            {"name": "Multi Otsu", "object_name": "segment_multi_otsu", "icon": "src/icons/segmentation.svg", "function": self.segmentation_handler},
+            {"name": "Chan Vese", "object_name": "segment_chan_vese", "icon": "src/icons/segmentation.svg", "function": self.segmentation_handler},
+            {"name": "Morph Snakes", "object_name": "segment_moprh_snakes", "icon": "src/icons/segmentation.svg", "function": self.segmentation_handler},
+
+            {"name": "Roberts", "object_name": "edge_roberts", "icon": "src/icons/edge_detection.svg", "function": self.edge_detection_handler},
+            {"name": "Sobel", "object_name": "edge_sobel", "icon": "src/icons/edge_detection.svg", "function": self.edge_detection_handler},
+            {"name": "Scharr", "object_name": "edge_scharr", "icon": "src/icons/edge_detection.svg", "function": self.edge_detection_handler},
+            {"name": "Prewitt", "object_name": "edge_prewitt", "icon": "src/icons/edge_detection.svg", "function": self.edge_detection_handler},
+        ]
+        for button_dict in buttons:
+
+            button = QtWidgets.QPushButton(button_dict['name'])
+            button.setObjectName(button_dict['object_name'])
+            button.clicked.connect(button_dict['function'])
+            button.setIcon(QtGui.QIcon(button_dict['icon']))
+
+            self.toolbox_layout.addWidget(button)
+        
+            # Connect Menu buttons
+            menu_button = self.findChild(QtWidgets.QAction, button_dict['object_name'] + "_menu")
+            if menu_button:
+                menu_button.triggered.connect(button_dict['function'])
 
     def edit_full_menu_buttons(self, sender):
         """
