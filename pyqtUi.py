@@ -174,7 +174,10 @@ class PyqtUI(QMainWindow, Image_Operations):
                 self.toolbox_layout.itemAt(
                     self.toolbox_layout.indexOf(self.findChild(QtWidgets.QPushButton, button_name))
                 ).widget().setVisible(True)
+
     #############################################################
+
+
 
     ###################### File Operations ######################
 
@@ -195,10 +198,12 @@ class PyqtUI(QMainWindow, Image_Operations):
             # Enable the buttons
             self.change_button_state(self.all_buttons, True)
     
+
     def save_output_image(self):
         # If the folder path is not empty, save the output image
         if self.source_image_path:
             self.get_output_image().save_image(self.source_image_path)
+
 
     def save_as_output_image(self):
 
@@ -217,6 +222,7 @@ class PyqtUI(QMainWindow, Image_Operations):
             else:
                 print("Please select a valid path with .jpg extension")
 
+
     def export_output_image(self):
         while True:
             # Custom extension choice (jpg, png, bmp)
@@ -232,7 +238,6 @@ class PyqtUI(QMainWindow, Image_Operations):
                 break
             else:
                 print("Please select a valid path with .jpg or .png or .bmp extension : ", image_save_path)
-
 
 
     def export_source_image(self):
