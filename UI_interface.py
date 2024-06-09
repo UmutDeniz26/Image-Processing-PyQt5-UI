@@ -72,12 +72,9 @@ class UI_Interface(QMainWindow, Image_Operations):
         for button in self.findChildren(QtWidgets.QMenu):
             buttons.append(button)
 
-        buttons.append(self.output_save_menu)
-        buttons.append(self.output_save_as_menu)
-        buttons.append(self.output_export_menu)
-        buttons.append(self.output_clear_menu)
-        buttons.append(self.output_undo_menu)
-        buttons.append(self.output_redo_menu)
+        buttons.append(self.output_save_menu);buttons.append(self.output_save_as_menu)
+        buttons.append(self.output_export_menu);buttons.append(self.output_clear_menu)
+        buttons.append(self.output_undo_menu);buttons.append(self.output_redo_menu)
 
         return buttons
 

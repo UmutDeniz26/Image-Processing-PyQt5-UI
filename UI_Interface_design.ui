@@ -116,7 +116,7 @@
                      <string/>
                     </property>
                     <property name="pixmap">
-                     <pixmap>../final_project/src_side/icon/Logo.png</pixmap>
+                     <pixmap>src/icons/menu.png</pixmap>
                     </property>
                     <property name="scaledContents">
                      <bool>true</bool>
