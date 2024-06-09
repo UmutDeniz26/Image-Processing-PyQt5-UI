@@ -40,9 +40,12 @@ class Image_Operations:
     
     # Get the output image
     def get_output_image(self) -> np.ndarray:
-        index = self.output_image_history["current_index"]
-        return self.output_image_history["image_history"][index] 
-    
+
+        try:
+            index = self.output_image_history["current_index"]
+            return self.output_image_history["image_history"][index] 
+        except:
+            print("No output image available")
 
 
 
@@ -66,7 +69,7 @@ class Image_Operations:
             self.__output_image = self.output_image_history["image_history"][self.output_image_history["current_index"]]
         except:
             print("No more redo operations")
-            
+
     #################################################################################################################
 
 
