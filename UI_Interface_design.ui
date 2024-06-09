@@ -267,7 +267,7 @@
                   </property>
                   <property name="icon">
                    <iconset>
-                    <normaloff>../final_project/src/icons/UI Basic GLYPH-46.svg</normaloff>../final_project/src/icons/UI Basic GLYPH-46.svg</iconset>
+                    <normaloff>src/icons/power.svg</normaloff>src/icons/power.svg</iconset>
                   </property>
                   <property name="iconSize">
                    <size>

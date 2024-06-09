@@ -55,14 +55,8 @@ class UI_Interface(QMainWindow, Image_Operations):
             self.output_save_menu, self.output_save_as_menu, self.output_export_menu, self.output_clear_menu, self.output_undo_menu, self.output_redo_menu
         ]
 
-        # Always display buttons
-        self.always_display_buttons = [
-            self.source_folder_menu, self.exit_menu, self.exit_button, self.source_side,
-            self.findChild(QtWidgets.QPushButton, "source_open"), self.source_folder_menu, self.menuFile
-        ]
-
         # Disable the buttons
-        self.change_buttons_state(False)
+        self.change_buttons_state("default",True)
 
     ###################### UI Operations ######################
 
@@ -80,8 +74,40 @@ class UI_Interface(QMainWindow, Image_Operations):
 
         buttons.append(self.output_save_menu)
         buttons.append(self.output_save_as_menu)
+        buttons.append(self.output_export_menu)
+        buttons.append(self.output_clear_menu)
+        buttons.append(self.output_undo_menu)
+        buttons.append(self.output_redo_menu)
 
         return buttons
+
+
+    def change_buttons_state(self, state = "default", visible = True):
+        """
+        @brief Changes the enabled state of buttons.
+        @param state The state to set the buttons to. Can be "full", "source_opened" or "default".
+        """
+
+
+        if state == "source_opened":
+            edit_buttons = [
+                self.output_side, 
+                self.output_save_menu, self.output_save_as_menu, self.output_export_menu, 
+                self.output_clear_menu, self.output_undo_menu, self.output_redo_menu,
+            ]
+        elif state == "default":
+            edit_buttons = [
+                self.source_folder_menu, self.exit_menu, self.exit_button, self.source_side,
+                self.findChild(QtWidgets.QPushButton, "source_open"), self.source_folder_menu, self.menuFile
+            ]
+        elif state == "full":
+            edit_buttons = []
+            
+        for button in self.get_buttons():
+            if button in edit_buttons:
+                button.setEnabled(visible)
+            else:
+                button.setEnabled(not visible)
 
     ###################### Side Bar #############################
 
@@ -223,7 +249,7 @@ class UI_Interface(QMainWindow, Image_Operations):
             self.source_image_path = image_path
 
             # Enable the buttons
-            self.change_buttons_state(True)
+            self.change_buttons_state("source_opened", False)
 
     def save_output_image(self):
         """
@@ -306,24 +332,16 @@ class UI_Interface(QMainWindow, Image_Operations):
         @brief Updates the output image display in the UI.
         """
         label_size = (self.output_image_frame.width(), self.output_image_frame.height())
-        try:
-            self.output_image_frame.setPixmap(
-                QPixmap.fromImage(
-                    self.get_output_image().get_QImage()
-                ).scaled(label_size[0], label_size[1])
-            )
-            self.output_image_frame.setAlignment(Qt.AlignCenter)
-        except:
-            if len(self.get_output_image().get_nd_image().shape) < 2:
-                # it means img is numpy array that comes from segmentation
-                self.output_image_frame.setPixmap(
-                    QPixmap.fromImage(
-                        self.get_output_image().get_nd_image()
-                    ).scaled(label_size[0], label_size[1])
-                )
-                self.output_image_frame.setAlignment(Qt.AlignCenter)
-            else:
-                print("Error in update_output_image, image shape: ", self.get_output_image().get_nd_image().shape)
+        
+        self.output_image_frame.setPixmap(
+            QPixmap.fromImage(
+                self.get_output_image().get_QImage()
+            ).scaled(label_size[0], label_size[1])
+        )
+        self.output_image_frame.setAlignment(Qt.AlignCenter)
+
+        self.change_buttons_state("full", False)
+        
 
     def conversion_handler(self):
         """
@@ -359,16 +377,6 @@ class UI_Interface(QMainWindow, Image_Operations):
         @brief Exits the application.
         """
         sys.exit()
-       
-    def change_buttons_state(self, visible=True):
-        """
-        @brief Changes the enabled state of buttons.
-        @param visible Boolean to enable or disable buttons.
-        """
-        for button in self.get_buttons():
-            if button in self.always_display_buttons:
-                continue
-            button.setDisabled( not visible)
 
     def image_edit_operations(self):
         """
@@ -389,11 +397,13 @@ class UI_Interface(QMainWindow, Image_Operations):
         elif object_name == "source_clear":
             self.set_source_image(None)
             self.source_image_path = None
-            self.change_buttons_state(False)
+            self.change_buttons_state("default", True)
             self.source_image_frame.clear()
 
         elif object_name == "output_clear":
             self.output_image_history = {"image_history":[], "current_index":0}
+            self.change_buttons_state("source_opened", False)
+            self.source_side.click()
             self.output_image_frame.clear()
 
 if __name__ == '__main__':
