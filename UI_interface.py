@@ -1,4 +1,4 @@
-# Read PyqtUI.ui file and show the window
+# Read UI_Interface.ui file and show the window
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtGui import QPixmap, QImage
@@ -11,10 +11,10 @@ import numpy as np
 import os
 from Image_Operations import Image_Operations
 
-class PyqtUI(QMainWindow, Image_Operations):
+class UI_Interface(QMainWindow, Image_Operations):
     def __init__(self):
         super().__init__()
-        uic.loadUi('pyqtUI_design.ui', self)
+        uic.loadUi('UI_Interface_design.ui', self)
         self.show()
 
         ###################### Side Bar #############################
@@ -45,16 +45,8 @@ class PyqtUI(QMainWindow, Image_Operations):
         self.output_undo_menu.triggered.connect(self.undo_output_image)
         self.output_redo_menu.triggered.connect(self.redo_output_image)
         self.exit_button.clicked.connect(self.exit_app)
+        self.exit_menu.triggered.connect(self.exit_app)
                         
-        
-        # Button lists
-        self.all_buttons = [
-            self.source_folder_menu, self.source_export_menu, self.source_clear_menu,
-
-            self.output_undo_menu,self.output_save_menu, self.output_save_as_menu, self.output_export_menu,self.output_clear_menu,self.output_redo_menu
-
-            ,self.exit_menu
-        ]
 
         self.menu_buttons = [
             self.source_folder_menu, self.source_export_menu, self.source_clear_menu, 
@@ -64,11 +56,30 @@ class PyqtUI(QMainWindow, Image_Operations):
 
         # Always display buttons
         self.always_display_buttons = [
-            self.source_folder_menu, self.exit_menu, self.exit_button
+            self.source_folder_menu, self.exit_menu, self.exit_button, self.source_side,
+            self.findChild(QtWidgets.QPushButton, "source_open"),self.source_folder_menu, self.menuFile
+
         ]
 
         # Disable the buttons
-        self.change_button_state(self.all_buttons, False)
+        self.change_buttons_state( False )
+
+
+    ###################### UI Operations ######################
+
+    def get_buttons(self):
+        buttons = []
+
+        for button in self.findChildren(QtWidgets.QPushButton):
+            buttons.append(button)
+        for button in self.findChildren(QtWidgets.QMenu):
+            buttons.append(button)
+
+        buttons.append(self.output_save_menu)
+        buttons.append(self.output_save_as_menu)
+
+
+        return buttons
 
 
     ###################### Side Bar #############################
@@ -86,6 +97,7 @@ class PyqtUI(QMainWindow, Image_Operations):
         self.hold_sender = sender
 
     def init_buttons(self):
+
         button_names = [["Open", "Export", "Clear"],
                         ["Save", "Save As", "Export", "Undo", "Redo", "Clear"],
                         ['Gray', 'HSV'], 
@@ -114,11 +126,23 @@ class PyqtUI(QMainWindow, Image_Operations):
         
         for i, (button_name, button_object_name, button_icon, button_functions) in enumerate(zip(button_names, button_object_names, button_icons, button_functions)):
             for j, (name, object_name, icon, function) in enumerate(zip(button_name, button_object_name, button_icon,button_functions)):
+                
                 button = QtWidgets.QPushButton(name)
+                
                 button.setObjectName(object_name)
+                
                 button.setIcon(QtGui.QIcon(icon))
+
                 button.clicked.connect(function)
+                
                 self.toolbox_layout.addWidget(button)
+
+                # Connect Menu buttons
+                menu_button = self.findChild(QtWidgets.QAction, object_name + "_menu")
+                if menu_button:
+                    menu_button.triggered.connect(function)
+                    
+
 
     def edit_full_menu_buttons(self, sender):
         # Hide all the buttons not
@@ -196,7 +220,7 @@ class PyqtUI(QMainWindow, Image_Operations):
             self.source_image_path = image_path
 
             # Enable the buttons
-            self.change_button_state(self.all_buttons, True)
+            self.change_buttons_state( True )
     
 
     def save_output_image(self):
@@ -340,38 +364,40 @@ class PyqtUI(QMainWindow, Image_Operations):
     def exit_app(self):
         sys.exit()
        
-    def change_button_state(self, button, state):
-        for button in self.all_buttons:
-            if button not in self.always_display_buttons:
-                button.setDisabled(False) if state else button.setDisabled(True)
+    def change_buttons_state(self, visible=True):
+        for button in self.get_buttons():
+            if button in self.always_display_buttons:
+                continue
+            button.setDisabled(not visible)
 
     def image_edit_operations(self):
         # Get the sender
         sender = self.sender()
+        object_name = sender.objectName().replace('_menu', '')
 
         # Undo - Redo operations
-        if sender.objectName() == "output_undo":
+        if object_name == "output_undo":
             self.undo_output_image()
             self.update_output_image()
 
-        elif sender.objectName() == "output_redo":
+        elif object_name == "output_redo":
             self.redo_output_image()
             self.update_output_image()
         
-        elif sender.objectName() == "source_clear":
+        elif object_name == "source_clear":
             self.set_source_image(None);self.source_image_path = None
 
-            self.change_button_state(self.all_buttons, False)
+            self.change_buttons_state( False )
             self.source_image_frame.clear()
 
-        elif sender.objectName() == "output_clear":
+        elif object_name == "output_clear":
             self.output_image_history = {"image_history":[], "current_index":0}
             self.output_image_frame.clear()
 
 
 if __name__ == '__main__':
-    print("Testing PyqtUI class")
+    print("Testing UI_Interface class")
 
     app = QtWidgets.QApplication(sys.argv)
-    window = PyqtUI()
+    window = UI_Interface()
     sys.exit(app.exec_())

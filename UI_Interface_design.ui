@@ -464,16 +464,25 @@
     <property name="title">
      <string>Conversion</string>
     </property>
+    <addaction name="bgr_2_gray_menu"/>
+    <addaction name="bgr_2_hsv_menu"/>
    </widget>
    <widget class="QMenu" name="menuSegmentation">
     <property name="title">
      <string>Segmentation</string>
     </property>
+    <addaction name="segment_multi_otsu_menu"/>
+    <addaction name="segment_chan_vese_menu"/>
+    <addaction name="segment_moprh_snakes_menu"/>
    </widget>
    <widget class="QMenu" name="menuEdge_Detection">
     <property name="title">
      <string>Edge Detection</string>
     </property>
+    <addaction name="edge_roberts_menu"/>
+    <addaction name="edge_sobel_menu"/>
+    <addaction name="edge_scharr_menu"/>
+    <addaction name="edge_prewitt_menu"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -553,6 +562,51 @@
   <action name="admin_print_menu">
    <property name="text">
     <string>Print</string>
+   </property>
+  </action>
+  <action name="bgr_2_gray_menu">
+   <property name="text">
+    <string>RGB to Gray</string>
+   </property>
+  </action>
+  <action name="bgr_2_hsv_menu">
+   <property name="text">
+    <string>RGB to HSV</string>
+   </property>
+  </action>
+  <action name="segment_multi_otsu_menu">
+   <property name="text">
+    <string>Multi Otsu</string>
+   </property>
+  </action>
+  <action name="segment_chan_vese_menu">
+   <property name="text">
+    <string>Chan Vese</string>
+   </property>
+  </action>
+  <action name="segment_moprh_snakes_menu">
+   <property name="text">
+    <string>Morphological Snakes</string>
+   </property>
+  </action>
+  <action name="edge_roberts_menu">
+   <property name="text">
+    <string>Roberts</string>
+   </property>
+  </action>
+  <action name="edge_sobel_menu">
+   <property name="text">
+    <string>Sobel</string>
+   </property>
+  </action>
+  <action name="edge_scharr_menu">
+   <property name="text">
+    <string>Scharr</string>
+   </property>
+  </action>
+  <action name="edge_prewitt_menu">
+   <property name="text">
+    <string>Prewitt</string>
    </property>
   </action>
  </widget>

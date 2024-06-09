@@ -49,25 +49,32 @@ class Image_Operations:
     ########################################### Undo - Redo Functions ####################################################
 
     def undo_output_image(self):
-        if self.output_image_history["current_index"] < len(self.output_image_history["image_history"]) - 1 :
-            self.output_image_history["current_index"] = (self.output_image_history["current_index"] + 1) 
-                                                      
-        # I didn't use set function because I don't want to update the history list
-        self.__output_image = self.output_image_history["image_history"][self.output_image_history["current_index"]]
-        
+        try:
+            if self.output_image_history["current_index"] < len(self.output_image_history["image_history"]) - 1 :
+                self.output_image_history["current_index"] = (self.output_image_history["current_index"] + 1) 
+                                                        
+            # I didn't use set function because I don't want to update the history list
+            self.__output_image = self.output_image_history["image_history"][self.output_image_history["current_index"]]
+        except:
+            print("No more undo operations")
     def redo_output_image(self):
-        if self.output_image_history["current_index"] > 0:
-            self.output_image_history["current_index"] = (self.output_image_history["current_index"] - 1)
-        
-        # I didn't use set function because I don't want to update the history list
-        self.__output_image = self.output_image_history["image_history"][self.output_image_history["current_index"]]
-
+        try:
+            if self.output_image_history["current_index"] > 0:
+                self.output_image_history["current_index"] = (self.output_image_history["current_index"] - 1)
+            
+            # I didn't use set function because I don't want to update the history list
+            self.__output_image = self.output_image_history["image_history"][self.output_image_history["current_index"]]
+        except:
+            print("No more redo operations")
+            
     #################################################################################################################
 
 
     # Function to convert the image to a specified color space
     def conversion_actions(self, method:str='gray') -> np.ndarray:
         src_type = self.get_source_image().get_image_channels_type()
+
+        method = method.replace('_menu', '')
 
         if method == 'bgr_2_gray':
             if src_type == 'BGR':
@@ -94,6 +101,8 @@ class Image_Operations:
         if self.get_source_image().get_image_channels_type() == 'BGR':
             img = self.conversion_actions(method='bgr_2_gray')
 
+        method = method.replace('_menu', '')
+
         # Detect edges using the specified method
         if method == 'edge_roberts':
             ret = ski.filters.roberts(img)
@@ -113,6 +122,8 @@ class Image_Operations:
         # Check if the image is in grayscale. If not, convert it to grayscale
         if self.get_source_image().get_image_channels_type() == 'BGR':
             img = self.conversion_actions(method='bgr_2_gray')
+
+        method = method.replace('_menu', '')
 
         # Detect segments using the specified method
         if method == 'segment_multi_otsu':

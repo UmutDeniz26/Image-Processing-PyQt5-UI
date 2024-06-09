@@ -1,4 +1,4 @@
-import pyqtUi
+from UI_interface import UI_Interface
 import Image_Operations
 
 import cv2
@@ -11,5 +11,5 @@ from PyQt5 import QtWidgets, uic
 if __name__ == '__main__':
     
     app = QtWidgets.QApplication(sys.argv)
-    window = pyqtUi.PyqtUI()
+    window = UI_Interface()
     sys.exit(app.exec_())
