@@ -4,7 +4,7 @@ import skimage as ski
 
 from Image import Image
 
-class Image_Operations:
+class Image_Operations(Image):
     def __init__(self, image:np.ndarray = None):
         """
         Constructor for image_operator class
