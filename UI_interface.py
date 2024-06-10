@@ -232,8 +232,8 @@ class UI_Interface(QMainWindow, Image_Operations):
         """
         @brief Opens a file dialog to load an image and sets it as the source image.
         """
-        # Get the image path
-        image_path = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file', 'c:\\', "Image files (*.jpg *.png)")[0]
+        # Get the image path jpg or png
+        image_path = QtWidgets.QFileDialog.getOpenFileName(self, 'Open file', '', "Image files (*.jpg *.png)")[0]
         
         # If the image path is not empty, set the source image
         if image_path:
@@ -355,7 +355,6 @@ class UI_Interface(QMainWindow, Image_Operations):
         """
         @brief Handles image segmentation operations.
         """
-        
         
         sender = self.sender()
         img = self.segment_image(method=sender.objectName())

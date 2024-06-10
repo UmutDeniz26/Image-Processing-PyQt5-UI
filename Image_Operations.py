@@ -130,7 +130,9 @@ class Image_Operations:
 
         # Detect segments using the specified method
         if method == 'segment_multi_otsu':
-            ret = ski.filters.threshold_multiotsu(img, num_classes)
+            tresholds = ski.filters.threshold_multiotsu(img, 2)
+            ret = np.digitize(img, bins=tresholds)
+
         elif method == 'segment_chan_vese':
             ret = ski.segmentation.chan_vese(img, num_classes)
         elif method == 'segment_moprh_snakes':
@@ -143,6 +145,3 @@ class Image_Operations:
 if __name__ == '__main__':
     print(" Testing image_operator class: ")    
     image = cv2.imread('src/images/lena.png', cv2.IMREAD_COLOR)
-    img_op = Image_Operations(image)
-    img_op.convert_to_gray()
-    img_op.edge_detection_actions( method='sobel' )
