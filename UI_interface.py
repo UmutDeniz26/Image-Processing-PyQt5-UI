@@ -7,6 +7,7 @@ from PyQt5 import QtGui
 import sys
 import cv2
 import numpy as np
+import time
 import os
 from Image_Operations import Image_Operations
 
@@ -236,6 +237,7 @@ class UI_Interface(QMainWindow, Image_Operations):
         
         # If the image path is not empty, set the source image
         if image_path:
+
             self.set_source_image(image_path)            
             self.update_source_image()
 
@@ -341,8 +343,11 @@ class UI_Interface(QMainWindow, Image_Operations):
         """
         @brief Handles image conversion operations.
         """
+
+
         sender = self.sender()
         img = self.conversion_actions(method=sender.objectName())
+        self.progress_bar(0.4)
         self.set_output_image(img)
         self.update_output_image()
 
@@ -350,8 +355,11 @@ class UI_Interface(QMainWindow, Image_Operations):
         """
         @brief Handles image segmentation operations.
         """
+        
+        
         sender = self.sender()
         img = self.segment_image(method=sender.objectName())
+        self.progress_bar(0.4)
         self.set_output_image(img)
         self.update_output_image()
 
@@ -359,8 +367,10 @@ class UI_Interface(QMainWindow, Image_Operations):
         """
         @brief Handles image edge detection operations.
         """
+        
         sender = self.sender()
         img = self.edge_detection_actions(method=sender.objectName())
+        self.progress_bar(0.4)
         self.set_output_image(img)
         self.update_output_image()
 
@@ -399,6 +409,27 @@ class UI_Interface(QMainWindow, Image_Operations):
             self.change_buttons_state("source_opened", False)
             self.source_side.click()
             self.output_image_frame.clear()
+        
+
+
+    # For UX purposes    
+    def progress_bar(self, time_delay):
+
+        # Temporary progress bar generation
+        layout = QtWidgets.QVBoxLayout()
+        progress_bar = QtWidgets.QProgressBar()
+        progress_bar.setRange(0, 100)
+        # Set height of the progress bar
+        progress_bar.setFixedHeight(15)
+        
+        layout.addWidget(progress_bar)
+
+        # Start the progress bar
+        self.statusBar().addPermanentWidget(progress_bar)
+        for i in range(101):
+            time.sleep( time_delay / 100 )
+            progress_bar.setValue(i)
+        self.statusBar().removeWidget(progress_bar)
 
 if __name__ == '__main__':
     """
