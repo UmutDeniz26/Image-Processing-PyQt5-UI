@@ -19,13 +19,15 @@ class Image_Operations:
     
     # Set the source image
     def set_source_image(self, image:np.ndarray):
-        self.source_image = Image(image)
+        
+        # If the input is a ndarray, create an Image object, else use the Image object directly
+        self.source_image = Image(image) if type(image) != Image else image
 
     # Set the output image
     def set_output_image(self, output:np.ndarray):
         
-        if type(output) != Image:
-            self.__output_image = Image(output)
+        # If the input is a ndarray, create an Image object, else use the Image object directly
+        self.__output_image = Image(output) if type(output) != Image else output
 
         if self.output_image_history["current_index"] == 0:
             self.output_image_history["image_history"].insert(0, self.__output_image)
