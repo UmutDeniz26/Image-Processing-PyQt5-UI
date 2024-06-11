@@ -132,8 +132,10 @@ class Image_Operations(Image):
 
         # Detect segments using the specified method
         if method == 'segment_multi_otsu':
-            tresholds = ski.filters.threshold_multiotsu(img, 2)
-            ret = np.digitize(img, bins=tresholds)
+            img = ski.filters.threshold_multiotsu(img)
+            img = np.digitize(self.source_image.get_nd_image(), bins=img)
+            ret = np.uint8(img * 255)
+            
 
         elif method == 'segment_chan_vese':
             ret = ski.segmentation.chan_vese(img, num_classes)
