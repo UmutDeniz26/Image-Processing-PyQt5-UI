@@ -282,6 +282,14 @@ class UI_Interface(QMainWindow, Image_Operations):
         if self.source_image_path:
             self.get_output_image().save_image(self.source_image_path)
 
+            self.findChild(QtWidgets.QPushButton, "output_clear").click()
+
+            self.set_source_image(self.source_image_path)
+
+            self.update_source_image()
+
+
+
     def save_as_output_image(self):
         """
         @brief Opens a file dialog to save the output image with a new name.
