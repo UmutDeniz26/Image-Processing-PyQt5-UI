@@ -11,6 +11,34 @@ import time
 import os
 from Image_Operations import Image_Operations
 
+from functools import wraps
+
+# Define the decorator
+def progress_bar_decorator(time_delay):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(self, *args, **kwargs):
+            # Temporary progress bar generation
+            layout = QtWidgets.QVBoxLayout()
+            progress_bar = QtWidgets.QProgressBar()
+            progress_bar.setRange(0, 100)
+            progress_bar.setFixedHeight(15)
+            layout.addWidget(progress_bar)
+            
+            # Add progress bar to the status bar
+            self.statusBar().addPermanentWidget(progress_bar)
+            
+            for i in range(101):
+                time.sleep(time_delay / 100)
+                progress_bar.setValue(i)
+            self.statusBar().removeWidget(progress_bar)
+            
+            
+            return func(self, *args, **kwargs)
+        return wrapper
+    return decorator
+
+
 class UI_Interface(QMainWindow, Image_Operations):
     """
     @brief Main UI class for the interface, inheriting from QMainWindow and Image_Operations.
@@ -310,6 +338,7 @@ class UI_Interface(QMainWindow, Image_Operations):
 
     ###################### Image Operations ######################
 
+    @progress_bar_decorator(0.4)
     def update_source_image(self):
         """
         @brief Updates the source image display in the UI.
@@ -323,6 +352,7 @@ class UI_Interface(QMainWindow, Image_Operations):
         )
         self.source_image_frame.setAlignment(Qt.AlignCenter)
     
+    @progress_bar_decorator(0.4)
     def update_output_image(self):
         """
         @brief Updates the output image display in the UI.
@@ -347,7 +377,7 @@ class UI_Interface(QMainWindow, Image_Operations):
 
         sender = self.sender()
         img = self.conversion_actions(method=sender.objectName())
-        self.progress_bar(0.4)
+        
         self.set_output_image(img)
         self.update_output_image()
 
@@ -358,7 +388,7 @@ class UI_Interface(QMainWindow, Image_Operations):
         
         sender = self.sender()
         img = self.segment_image(method=sender.objectName())
-        self.progress_bar(0.4)
+        
         self.set_output_image(img)
         self.update_output_image()
 
@@ -369,7 +399,7 @@ class UI_Interface(QMainWindow, Image_Operations):
         
         sender = self.sender()
         img = self.edge_detection_actions(method=sender.objectName())
-        self.progress_bar(0.4)
+
         self.set_output_image(img)
         self.update_output_image()
 
@@ -409,26 +439,6 @@ class UI_Interface(QMainWindow, Image_Operations):
             self.source_side.click()
             self.output_image_frame.clear()
         
-
-
-    # For UX purposes    
-    def progress_bar(self, time_delay):
-
-        # Temporary progress bar generation
-        layout = QtWidgets.QVBoxLayout()
-        progress_bar = QtWidgets.QProgressBar()
-        progress_bar.setRange(0, 100)
-        # Set height of the progress bar
-        progress_bar.setFixedHeight(15)
-        
-        layout.addWidget(progress_bar)
-
-        # Start the progress bar
-        self.statusBar().addPermanentWidget(progress_bar)
-        for i in range(101):
-            time.sleep( time_delay / 100 )
-            progress_bar.setValue(i)
-        self.statusBar().removeWidget(progress_bar)
 
 if __name__ == '__main__':
     """
