@@ -399,7 +399,7 @@ class UI_Interface(QMainWindow, Image_Operations):
         self.update_output_image()
 
     def edge_detection_handler(self):
-        """
+        """,
         @brief Handles image edge detection operations.
         """
         
@@ -455,3 +455,4 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     window = UI_Interface()
     sys.exit(app.exec_())
+
